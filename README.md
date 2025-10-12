@@ -26,3 +26,19 @@ Every script in this toolkit is designed with:
 1. Clone the repo:
    ```bash
    git clone https://github.com/DJW1080/technification-ps-toolkit.git
+
+2. Navigate to the script you want to run.
+
+3. Review the script header for usage notes.
+
+4. Run in PowerShell with appropriate permissions.
+
+---
+
+📜 License
+This project is licensed under the MIT License – see the LICENSE file for details.
+
+---
+
+👤 Author
+Dean – blending decades of hands-on engineering with meticulous PowerShell scripting. Part of the Technification ecosystem.
