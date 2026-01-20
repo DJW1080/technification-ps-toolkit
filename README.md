@@ -6,11 +6,9 @@ It is built on three principles: **safety, usability, and transparency**.
 ---
 
 ## 🔧 What’s Inside
-- **Registry Cleaner (Hybrid + Full)** – safe removal of obsolete keys with backups and logs.
-- **Registry Scanner** – detect invalid or suspicious entries.
-- **Backup & Restore Utilities** – export/import registry hives with versioned backups.
-- **Audit Trail Viewer** – parse and review logs for full accountability.
-
+- Windows Auto Repair Tool Pro
+- Windows Event Log Cleaner Tool Pro
+  
 ---
 
 ## 🛡️ Philosophy
