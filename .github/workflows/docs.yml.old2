@@ -13,9 +13,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Setup PowerShell
-      uses: actions/setup-powershell@v2
+      uses: PowerShell/PowerShell-For-GitHub-Actions@v1
       with:
-        pwsh-version: '7.4'
+        version: '7.4'
 
     - name: Install PlatyPS
       shell: pwsh
@@ -24,16 +24,15 @@ jobs:
     - name: Import module
       shell: pwsh
       run: |
-        Import-Module "$PWD/src/technification-ps-toolkit.psd1" -Force
-        Get-Module technification-ps-toolkit | Format-List Name,Version,Path
+        Import-Module ./src/technification-ps-toolkit.psd1 -Force
 
-    - name: Generate documentation
+    - name: Generate docs
       shell: pwsh
       run: |
         New-MarkdownHelp -Module technification-ps-toolkit -OutputFolder docs -Force
         Update-MarkdownHelp -Path docs -Force
 
-    - name: Commit documentation
+    - name: Commit docs
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "Update documentation"

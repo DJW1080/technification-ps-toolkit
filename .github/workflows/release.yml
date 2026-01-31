@@ -1,25 +1,39 @@
-name: PowerShell Release
+name: Release
 
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*'
 
 jobs:
   release:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Build module
+    - name: Setup PowerShell
+      uses: actions/setup-powershell@v2
+      with:
+        pwsh-version: '7.4'
+
+    - name: Import module
       shell: pwsh
       run: |
-        ./build.ps1
+        Import-Module "$PWD/src/technification-ps-toolkit.psd1" -Force
+        Get-Module technification-ps-toolkit | Format-List Name,Version,Path
+
+    - name: Package module
+      shell: pwsh
+      run: |
+        $Output = "package"
+        New-Item -ItemType Directory -Force -Path $Output | Out-Null
+        Copy-Item -Path ./src/* -Destination $Output -Recurse -Force
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: |
-          output/*.zip
-          
+        files: package/**
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

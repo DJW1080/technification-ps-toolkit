@@ -1,35 +1,35 @@
-name: PowerShell CI
+name: Test
+
 on:
   push:
+    branches: [ main ]
   pull_request:
 
 jobs:
   test:
     runs-on: windows-latest
 
-    strategy:
-      matrix:
-        pwsh-version: [ "5.1", "7.4" ]
-
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
     - name: Setup PowerShell
-      uses: PowerShell/PowerShell-For-GitHub-Actions@v1
+      uses: actions/setup-powershell@v2
       with:
-        version: ${{ matrix.pwsh-version }}
+        pwsh-version: '7.4'
 
-    - name: Install dependencies
+    - name: Install test dependencies
       shell: pwsh
       run: |
-        Install-Module Pester -Force -Scope CurrentUser
         Install-Module PSScriptAnalyzer -Force -Scope CurrentUser
+        Install-Module Pester -Force -Scope CurrentUser
 
     - name: Run ScriptAnalyzer
       shell: pwsh
-      run: Invoke-ScriptAnalyzer -Path . -Recurse -Severity Warning,Error
+      run: |
+        Invoke-ScriptAnalyzer -Path ./src -Recurse -Severity Warning,Error
 
     - name: Run Pester tests
       shell: pwsh
-      run: Invoke-Pester -Output Detailed
-      
+      run: |
+        Invoke-Pester -Path ./tests -CI
