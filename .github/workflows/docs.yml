@@ -9,27 +9,24 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Setup PowerShell
-      uses: PowerShell/PowerShell-For-GitHub-Actions@v2
-      with:
-        pwsh-version: '7.4'
+    - uses: actions/checkout@v4
 
     - name: Install PlatyPS
       shell: pwsh
-      run: Install-Module PlatyPS -Force -Scope CurrentUser
+      run: |
+        Install-Module PlatyPS -Repository PSGallery -Force -Scope CurrentUser -Confirm:$false
 
     - name: Import module
       shell: pwsh
       run: |
-        Import-Module "$PWD/src/technification-ps-toolkit.psd1" -Force
+        Import-Module "$env:GITHUB_WORKSPACE\src\technification-ps-toolkit.psd1" -Force
         Get-Module technification-ps-toolkit | Format-List Name,Version,Path
+        Get-Command -Module technification-ps-toolkit
 
     - name: Generate documentation
       shell: pwsh
       run: |
+        New-Item -ItemType Directory -Force -Path docs | Out-Null
         New-MarkdownHelp -Module technification-ps-toolkit -OutputFolder docs -Force
         Update-MarkdownHelp -Path docs -Force
 
