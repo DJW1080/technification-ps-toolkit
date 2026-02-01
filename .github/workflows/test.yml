@@ -10,26 +10,32 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Setup PowerShell
-      uses: PowerShell/PowerShell-For-GitHub-Actions@v2
-      with:
-        pwsh-version: '7.4'
+    - uses: actions/checkout@v4
 
     - name: Install test dependencies
       shell: pwsh
       run: |
-        Install-Module PSScriptAnalyzer -Force -Scope CurrentUser
-        Install-Module Pester -Force -Scope CurrentUser
+        Install-Module PSScriptAnalyzer -Repository PSGallery -Force -Scope CurrentUser -Confirm:$false
+        Install-Module Pester -Repository PSGallery -Force -Scope CurrentUser -Confirm:$false
+
+        Get-Module PSScriptAnalyzer -ListAvailable | Select-Object Name,Version | Sort-Object Version -Descending | Select-Object -First 1
+        Get-Module Pester -ListAvailable | Select-Object Name,Version | Sort-Object Version -Descending | Select-Object -First 1
 
     - name: Run ScriptAnalyzer
       shell: pwsh
       run: |
-        Invoke-ScriptAnalyzer -Path ./src -Recurse -Severity Warning,Error
+        $results = Invoke-ScriptAnalyzer -Path "$env:GITHUB_WORKSPACE/src" -Recurse -Severity Warning,Error
+
+        if ($results) {
+          $results | Format-Table
+          throw "PSScriptAnalyzer found issues."
+        }
 
     - name: Run Pester tests
       shell: pwsh
       run: |
-        Invoke-Pester -Path ./tests -CI
+        if (-not (Test-Path "$env:GITHUB_WORKSPACE/tests")) {
+          throw "Tests folder not found."
+        }
+
+        Invoke-Pester -Path "$env:GITHUB_WORKSPACE/tests" -CI
