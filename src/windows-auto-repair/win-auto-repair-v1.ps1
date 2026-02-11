@@ -116,7 +116,7 @@ function Start-ComponentCleanup-ResetBase {
 }
 
 function Remove-TempFiles {
-    Invoke-WithSpinner -Description "Temporary File Cleanup" -Command `
+    Invoke-WithSpinner -Description "Temporary File Remover" -Command `
         "Remove-Item '$env:TEMP\*' -Recurse -Force -ErrorAction SilentlyContinue;
          Remove-Item 'C:\Windows\Temp\*' -Recurse -Force -ErrorAction SilentlyContinue;
          Remove-Item 'C:\Windows\SoftwareDistribution\Download\*' -Recurse -Force -ErrorAction SilentlyContinue;
@@ -139,7 +139,7 @@ function Repair-WindowsUpdate {
 }
 
 function New-RestorePoint {
-    Invoke-WithSpinner -Description "Creating Restore Point" -Command `
+    Invoke-WithSpinner -Description "Creating New Restore Point" -Command `
         "Checkpoint-Computer -Description 'WinRepairPro' -RestorePointType MODIFY_SETTINGS"
 }
 
@@ -186,7 +186,7 @@ function Exit-Program {
 function Show-Menu {
     Clear-Host
     Write-Host "===========================================================" -ForegroundColor Yellow
-    Write-Host "===                 Win-Auto-Repair Pro                 ===" -ForegroundColor Yellow
+    Write-Host "===            Windows Automatic Repair Tool            ===" -ForegroundColor Yellow
     Write-Host "===                                                     ===" -ForegroundColor Yellow
     Write-Host "===                        V 1.0                        ===" -ForegroundColor Yellow
     Write-Host "===========================================================" -ForegroundColor Yellow

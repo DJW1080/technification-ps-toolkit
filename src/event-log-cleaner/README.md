@@ -21,7 +21,7 @@ Designed for **Users and IT Professionals**, this tool provides a streamlined, c
 - Add wildcard exclusion
 - Remove exact exclusion
 - Remove wildcard exclusion
-- Start Log Cleanup
+- Start Log Cleaner
 - Toggle WhatIf (dry run)
 
 ## ⚙️ Main Function
@@ -37,9 +37,9 @@ Designed for **Users and IT Professionals**, this tool provides a streamlined, c
 ## 📦 Installation
 
 ```powershell
-https://github.com/DJW1080/technification-ps-toolkit.git
-📂 cd technification-ps-toolkit/event-log-cleaner
-PS> .\event-log-cleaner-v1.ps1
+git clone https://github.com/DJW1080/technification-ps-toolkit.git
+cd .\technification-ps-toolkit\src\event-log-cleaner\
+.\event-log-cleaner-v1.ps1
 ```
 
 ## 📋 Interactive Menu
@@ -50,8 +50,8 @@ PS> .\event-log-cleaner-v1.ps1
  [3] - Add wildcard exclusion
  [4] - Remove exact exclusion
  [5] - Remove wildcard exclusion
- [6] - Start Log Cleanup
- [7] - Toggle WhatIf (dry run)  [Currently:False]
+ [6] - Start Log Cleaner
+ [7] - Toggle WhatIf (dry run)  [Currently: False]
  [0] - Exit
 ```
 

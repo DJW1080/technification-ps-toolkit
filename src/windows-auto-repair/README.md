@@ -45,7 +45,8 @@ Designed for **Users and IT Professionals**, this tool provides a streamlined, c
 ## 📦 Installation
 
 ```powershell
-https://github.com/DJW1080/technification-ps-toolkit.git
+git clone https://github.com/DJW1080/technification-ps-toolkit.git
+cd .\technification-ps-toolkit\src\windows-auto-repair\
 .\win-auto-repair-v1.ps1
 ```
 

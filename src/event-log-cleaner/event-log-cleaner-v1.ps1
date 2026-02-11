@@ -218,7 +218,7 @@ function Show-Menu {
     Write-Host "3) Add wildcard exclusion"
     Write-Host "4) Remove exact exclusion"
     Write-Host "5) Remove wildcard exclusion"
-    Write-Host "6) Start Log Cleanup"
+    Write-Host "6) Start Log Cleaner"
     Write-Host "7) Toggle WhatIf (dry run)  [Currently: $WhatIf]"
     Write-Host "0) Exit"
     Write-Host "============================================================" -ForegroundColor blue
