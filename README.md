@@ -2,8 +2,6 @@
 
 **technification-ps-toolkit** is the root repository for all tested and working PowerShell scripts.
 
----
-
 ## 🏗️ Design Philosophy
 
 Every script in this toolkit is designed with:
@@ -13,14 +11,10 @@ Every script in this toolkit is designed with:
 - **Auditability** – timestamped logs for traceability.
 - **User Control** – prompts and modular design for customisation.
 
----
+## 🔧 Windows Toolbox Collection
 
-## 🔧 Windows toolbox Collection
-
-- Windows Auto Repair Tool Pro
-- Windows Event Log Cleaner Tool Pro
-
----
+- Windows Automatic Repair Tool
+- Windows Event Log Cleaner Tool
 
 ## 📂 Directory Map  
 
@@ -28,39 +22,33 @@ Every script in this toolkit is designed with:
 technification-ps-toolkit/
 │
 ├── src/
-│   ├── event-log-clearner/
-│   │   ├── event-log-clearner.ps1   # PowerShell Script
-│   │   └── README.md                # Tool Manual
+│   ├── event-log-cleaner/
+│   │   ├── event-log-cleaner-v1.ps1   # PowerShell Script
+│   │   └── README.md                  # Tool Manual
 │   │ 
-│   └── win-auto-rerpair/
-│       ├── README.md                # Tool Manual
-│       └── win-auto-repair.ps1      # PowerShell Script 
+│   └── win-auto-repair/
+│       ├── README.md                  # Tool Manual
+│       └── win-auto-repair-v1.ps1     # PowerShell Script 
 │
-├── README.md                        # This file
-└── LICENSE                          # Repository Licence
+├── README.md                          # This file
+└── LICENSE                            # Repository Licence
 ```
-
----
 
 ## 📦 Setup Instructions
 
-1. Clone the repo:
+1. Clone the Repository:
 
    ```bash
    git clone https://github.com/DJW1080/technification-ps-toolkit.git
    ```
 
 2. Navigate to the script you want to run.
-3. Run in PowerShell as Adminisitrator.
-
----
+3. Run in PowerShell as Administrator.
 
 ## 📝 Author
 
-**Dean John Weiniger** _– blending decades of experiance with meticulous PowerShell scripting._  
+**Dean John Weiniger** _– blending decades of experience with meticulous PowerShell scripting._  
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0003--4733--1421-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0003-4733-1421)  
-
----
 
 ## 📜 Licence
 

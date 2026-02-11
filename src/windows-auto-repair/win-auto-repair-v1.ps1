@@ -1,6 +1,6 @@
 <#
     Script Name     : win-auto-repair.ps1
-    Description     : Windows Automated Image Health Check and Repair Tool    
+    Description     : Windows Automated Image Repair Tool    
     Main functions  : Repairs Windows Image and Removes Temporary Files
     Author          : Dean John Weiniger
     Version         : 1.0

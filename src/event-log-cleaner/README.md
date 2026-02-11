@@ -1,4 +1,4 @@
-# 💻 Windows Event Log Cleaner Tool Pro
+# 💻 Windows Event Log Cleaner Tool
 
 ![PowerShell 7](https://img.shields.io/badge/Code-PowerShell-012456?logo=powershell "100% PowerShell")
 ![Windows OS](https://img.shields.io/badge/OS-Windows-0079d4?logo=windows "Runs on Windows")
@@ -8,27 +8,33 @@
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
 ![Version 1.0](https://img.shields.io/badge/Version-1.0-yellow?logo=version "Version 1.0")  
 
----
-
 ## 🔎 About
 
 This **PowerShell Script** automates Windows maintenance and Event Log clearing.  
 Using a **Menu-driven Interface** with extended clearing options and logging.  
-Designed for Users and IT Professionals, this tool provides a streamlined, colour-coded workflow with summary.
-
----
+Designed for **Users and IT Professionals**, this tool provides a streamlined, colour-coded workflow with summary.
 
 ## 🛠️ Functions
 
-### ⚙️ Windows Log Cleaner - Option [6]
+- Show current exclusions
+- Add exact exclusion
+- Add wildcard exclusion
+- Remove exact exclusion
+- Remove wildcard exclusion
+- Start Log Cleanup
+- Toggle WhatIf (dry run)
 
-### ✅ Requirements
+## ⚙️ Main Function
+
+- Windows Log Cleaner - Option [6]
+
+## ✅ Requirements
 
 - Windows 11  
 - PowerShell 7  
-- Run as Admin
+- Run as Administrator
 
-### 📦 Installation
+## 📦 Installation
 
 ```powershell
 https://github.com/DJW1080/technification-ps-toolkit.git
@@ -36,26 +42,32 @@ https://github.com/DJW1080/technification-ps-toolkit.git
 PS> .\event-log-cleaner-v1.ps1
 ```
 
-### 📋 Interactive menu
+## 📋 Interactive Menu
 
-### ⚡ Best Practices
+```text
+ [1] - Show current exclusions
+ [2] - Add exact exclusion
+ [3] - Add wildcard exclusion
+ [4] - Remove exact exclusion
+ [5] - Remove wildcard exclusion
+ [6] - Start Log Cleanup
+ [7] - Toggle WhatIf (dry run)  [Currently:False]
+ [0] - Exit
+```
+
+## ⚡ Best Practices
 
 - **Run before major updates and image creation**  
-- **Clear the event logs before creating a new image of Windows**
-
----
+- **Clear all the event logs before creating a new image of Windows**
 
 ## 📝 Credits
 
 Created by **Dean John Weiniger**  
 Part of the **Technification PowerShell Toolkit**  
-Contributions welcome.
-
----
+Contributions welcome  
 
 ## 📜 Licence
 
-**© 2026 Dean John Weiniger**  
 This work is dedicated to the public domain under the **Creative Commons CC0 1.0 Universal License**.  
 [![CC0 1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey?logo=creativecommons&logoColor=white)](https://creativecommons.org/publicdomain/zero/1.0/)  
 
@@ -67,7 +79,7 @@ This work is dedicated to the public domain under the **Creative Commons CC0 1.0
 **No conditions apply:**  
 🚫 No attribution required.  
 🚫 No restrictions on use.  
-**Full licence text:** [https://creativecommons.org/publicdomain/zero/1.0/](https://creativecommons.org/publicdomain/zero/1.0/)  
+**Full licence text:** [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)  
 
 ---
 

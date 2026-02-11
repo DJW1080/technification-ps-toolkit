@@ -36,13 +36,13 @@ $ErrorActionPreference = 'Stop'
 # =========================
 # Default Exclusions
 # =========================
+
 $ExcludedExactLogs = [System.Collections.Generic.List[string]]::new()
 $ExcludedWildcardLogs = [System.Collections.Generic.List[string]]::new()
 
 # Defaults (edit in menu)
 $ExcludedExactLogs.Add('Security') | Out-Null
 $ExcludedWildcardLogs.Add('Microsoft-Windows-Windows Defender/*') | Out-Null
-
 function Test-IsExcludedLog {
     param([Parameter(Mandatory)][string]$LogName)
 
@@ -52,7 +52,6 @@ function Test-IsExcludedLog {
     }
     return $false
 }
-
 function Clear-EventLogWevtutil {
     param([Parameter(Mandatory)][string]$LogName)
 
@@ -66,7 +65,6 @@ function Clear-EventLogWevtutil {
         throw "wevtutil failed for '$LogName' (exit $exit): $msg"
     }
 }
-
 function Show-Exclusions {
     Write-Host ""
     Write-Host "Current exclusions" -ForegroundColor Cyan
@@ -79,7 +77,6 @@ function Show-Exclusions {
     else { $ExcludedWildcardLogs | ForEach-Object { Write-Host "    $_" } }
     Write-Host ""
 }
-
 function Add-ExactExclusion {
     $name = Read-Host "Enter exact log name to exclude (e.g. Security)"
     if ([string]::IsNullOrWhiteSpace($name)) { return }
@@ -90,7 +87,6 @@ function Add-ExactExclusion {
         Write-Host "Already excluded: $name" -ForegroundColor Yellow
     }
 }
-
 function Add-WildcardExclusion {
     $pattern = Read-Host "Enter wildcard pattern to exclude (e.g. Microsoft-Windows-Windows Defender/*)"
     if ([string]::IsNullOrWhiteSpace($pattern)) { return }
@@ -101,7 +97,6 @@ function Add-WildcardExclusion {
         Write-Host "Already excluded: $pattern" -ForegroundColor Yellow
     }
 }
-
 function Remove-ExactExclusion {
     if ($ExcludedExactLogs.Count -eq 0) { Write-Host "No exact exclusions to remove." -ForegroundColor Yellow; return }
     Show-Exclusions
@@ -114,7 +109,6 @@ function Remove-ExactExclusion {
         Write-Host "Not found in exact exclusions: $name" -ForegroundColor Yellow
     }
 }
-
 function Remove-WildcardExclusion {
     if ($ExcludedWildcardLogs.Count -eq 0) { Write-Host "No wildcard exclusions to remove." -ForegroundColor Yellow; return }
     Show-Exclusions
@@ -127,13 +121,11 @@ function Remove-WildcardExclusion {
         Write-Host "Not found in wildcard exclusions: $pattern" -ForegroundColor Yellow
     }
 }
-
 function Get-TargetLogs {
     Get-WinEvent -ListLog * |
         Where-Object { $_.IsEnabled -eq $true -and $_.RecordCount -gt 0 -and $_.LogName } |
         Sort-Object LogName
 }
-
 function Start-ClearLogs {
     Write-Host ""
     Write-Host "Enumerating event logs..." -ForegroundColor Cyan
@@ -206,7 +198,7 @@ function Start-ClearLogs {
     }
 
     Write-Host ""
-    Write-Host "================= EVENT LOG CLEANUP SUMMARY ================" -ForegroundColor Cyan
+    Write-Host "================= EVENT LOG CLEANER SUMMARY ================" -ForegroundColor Cyan
     Write-Host ("Total logs cleared    : {0}" -f $TotalLogsCleared) -ForegroundColor Green
     Write-Host ("Total events removed  : {0}" -f $TotalEventsRemoved) -ForegroundColor Green
     Write-Host ("Total logs skipped    : {0}" -f $TotalLogsSkipped) -ForegroundColor Yellow
@@ -215,7 +207,6 @@ function Start-ClearLogs {
     Write-Host ("Excluded wildcards    : {0}" -f ($(if ($ExcludedWildcardLogs.Count) { $ExcludedWildcardLogs -join ', ' } else { '(none)' }))) -ForegroundColor Gray
     Write-Host "=============--=============================================" -ForegroundColor Cyan
 }
-
 function Show-Menu {
     Write-Host ""
     Write-Host "============================================================" -ForegroundColor blue
@@ -227,7 +218,7 @@ function Show-Menu {
     Write-Host "3) Add wildcard exclusion"
     Write-Host "4) Remove exact exclusion"
     Write-Host "5) Remove wildcard exclusion"
-    Write-Host "6) Run Log Cleanup"
+    Write-Host "6) Start Log Cleanup"
     Write-Host "7) Toggle WhatIf (dry run)  [Currently: $WhatIf]"
     Write-Host "0) Exit"
     Write-Host "============================================================" -ForegroundColor blue
@@ -236,6 +227,7 @@ function Show-Menu {
 # =========================
 # Menu flow
 # =========================
+
 if ($Auto) {
     Run-Clear-Logs
     return
