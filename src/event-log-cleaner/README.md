@@ -1,11 +1,4 @@
----
-title: Windows Event Log Cleaner Tool Pro
-description: Windows Event Log Cleaner scripts
-author: Dean John Weiniger
-layout: default
----
-
-# 💻 Windows  Event Log Cleaner Tool Pro
+# 💻 Windows Event Log Cleaner Tool Pro
 
 ![PowerShell 7](https://img.shields.io/badge/Code-PowerShell-012456?logo=powershell "100% PowerShell")
 ![Windows OS](https://img.shields.io/badge/OS-Windows-0079d4?logo=windows "Runs on Windows")
@@ -27,15 +20,13 @@ Designed for Users and IT Professionals, this tool provides a streamlined, colou
 
 ## 🛠️ Functions
 
-
 ### ⚙️ Windows Log Cleaner - Option [6]
-
 
 ### ✅ Requirements
 
--	Windows 11  
--	PowerShell 7  
--	Run as Admin
+- Windows 11  
+- PowerShell 7  
+- Run as Admin
 
 ### 📦 Installation
 
@@ -45,21 +36,20 @@ https://github.com/DJW1080/technification-ps-toolkit.git
 PS> .\event-log-cleaner-v1.ps1
 ```
 
-### 📋 Interactive menu:
-
+### 📋 Interactive menu
 
 ### ⚡ Best Practices
 
 - **Run before major updates and image creation**  
-  clear the event logs before creating a new image of Wondows.
+- **Clear the event logs before creating a new image of Windows**
 
 ---
 
 ## 📝 Credits
 
-Created by **Dean John Weiniger**.  
-Part of the **Technification PowerShell Toolkit**.  
-Contributions welcome. 
+Created by **Dean John Weiniger**  
+Part of the **Technification PowerShell Toolkit**  
+Contributions welcome.
 
 ---
 
@@ -81,4 +71,4 @@ This work is dedicated to the public domain under the **Creative Commons CC0 1.0
 
 ---
 
-_Last updated: 21-01-2026_
+### _Last updated: 21-01-2026_

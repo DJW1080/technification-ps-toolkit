@@ -1,10 +1,3 @@
----
-title: Windows Auto Repair Tool Pro
-description: Windows repair scripts
-author: Dean John Weiniger
-layout: default
----
-
 # 💻 Windows Auto Repair Pro
 
 ![PowerShell 7](https://img.shields.io/badge/Code-PowerShell-012456?logo=powershell "100% PowerShell")
@@ -27,15 +20,15 @@ Designed for Users and IT Professionals, this tool provides a streamlined, colou
 
 ## 🛠️ Functions
 
-  - DISM & SFC automation
-  - Temporary file cleanup   
-  - CheckHealth, ScanHealth, & RestoreHealth  
-  - Component Cleanup & ResetBase  
-  - Network stack reset  
-  - Windows Update repair  
-  - System Restore Point option  
-  - System diagnostics
-  - System File Checker  
+- DISM & SFC automation  
+- Temporary file cleanup  
+- CheckHealth, ScanHealth, & RestoreHealth  
+- Component Cleanup & ResetBase  
+- Network stack reset  
+- Windows Update repair  
+- System Restore Point option  
+- System diagnostics
+- System File Checker  
 
 ### ⚙️ Windows Full Repair - Option [1]
 
@@ -49,9 +42,9 @@ Designed for Users and IT Professionals, this tool provides a streamlined, colou
 
 ### ✅ Requirements
 
--	Windows 10 or 11  
--	PowerShell 5.1+  
--	Run as Admin
+- Windows 10 or 11  
+- PowerShell 5.1+  
+- Run as Admin
 
 ### 📦 Installation
 
@@ -61,9 +54,9 @@ https://github.com/DJW1080/technification-ps-toolkit.git
 PS> .\win-auto-repair.ps1
 ```
 
-### 📋 Interactive menu:
+### 📋 Interactive menu
 
-```
+```text
  [1]  - Run Windows Full Repair
  [2]  - Cleanup Temporary Files
  [3]  - DISM CheckHealth
@@ -78,7 +71,8 @@ PS> .\win-auto-repair.ps1
  [12] - Run SFC 
  [0]  - Exit
 ```
-### 👉 Tip: 
+
+### 👉 Tip
 
 Run  [1] for full repair,  
 Then [2] to delete temp files.  
@@ -107,9 +101,9 @@ Then [2] to delete temp files.
 
 ## 📝 Credits
 
-Created by **Dean John Weiniger**.  
-Part of the **Technification PowerShell Toolkit**.  
-Contributions welcome. 
+Created by **Dean John Weiniger**  
+Part of the **Technification PowerShell Toolkit**  
+Contributions welcome
 
 ---
 
@@ -131,4 +125,4 @@ This work is dedicated to the public domain under the **Creative Commons CC0 1.0
 
 ---
 
-_Last updated: 17-11-2025_
+### _Last updated: 17-11-2025_

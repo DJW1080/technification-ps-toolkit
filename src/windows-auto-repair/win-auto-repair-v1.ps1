@@ -1,17 +1,17 @@
 <#
-    Script Name : win-auto-repair.ps1
-    Description : Windows Automated Image Health Check and Repair Tool
-                  Main functions:
-                  - Runs DISM and SFC commands
-                  - Cleans temporary files
-    Author      : Dean John Weiniger
-    Version     : 1.0
-    Date        : 2025-11-14
+    Script Name     : win-auto-repair.ps1
+    Description     : Windows Automated Image Health Check and Repair Tool    
+    Main functions  : Repairs Windows Image and Removes Temporary Files
+    Author          : Dean John Weiniger
+    Version         : 1.0
+    Type            : PowerShell 7
+    Date            : 2025-11-14
 #>
 
 # ---------------------------
 # Global Setup
 # ---------------------------
+
 $LogRoot = Join-Path $env:LOCALAPPDATA "Win-Auto-Repair"
 if (!(Test-Path $LogRoot)) { New-Item -ItemType Directory -Path $LogRoot | Out-Null }
 $SessionLog = Join-Path $LogRoot ("session-" + (Get-Date -Format "yyyyMMdd-HHmmss") + ".log")
@@ -60,7 +60,6 @@ function Invoke-WithSpinner {
         Write-Bad "$Description failed. Check log for details: $ActionLog"
     }
 }
-
 function Invoke-SystemRepairTask {
     param(
         [string]$Command,
@@ -86,37 +85,37 @@ function Invoke-SystemRepairTask {
 # ---------------------------
 # Native-progress tasks (SFC & DISM)
 # ---------------------------
-function Run-SFC {
+function Start-SFC {
          Write-Info "Running System File Checker..."
          sfc /scannow
 }
 
-function Run-DISM-CheckHealth { 
+function Start-DISM-CheckHealth { 
          Write-Info "Running Image Check Health..."
          DISM /Online /Cleanup-Image /CheckHealth
 }
 
-function Run-DISM-ScanHealth  {
+function Start-DISM-ScanHealth  {
          Write-Info "Running Image Scan Health..."
          DISM /Online /Cleanup-Image /ScanHealth
 }
 	
-function Run-DISM-RestoreHealth {
+function Start-DISM-RestoreHealth {
          Write-Info "Running Image Restore Health..."
          DISM /Online /Cleanup-Image /RestoreHealth 
 }
 
-function Run-ComponentCleanup {
+function Start-ComponentCleanup {
          Write-Info "Running Component Cleanup..."
          DISM /Online /Cleanup-Image /StartComponentCleanup
 }
 
-function Run-ComponentCleanup-ResetBase {
+function Start-ComponentCleanup-ResetBase {
          Write-Info "Running Component Reset Base..."	
          DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase
 }
 
-function Cleanup-TempFiles {
+function Remove-TempFiles {
     Invoke-WithSpinner -Description "Temporary File Cleanup" -Command `
         "Remove-Item '$env:TEMP\*' -Recurse -Force -ErrorAction SilentlyContinue;
          Remove-Item 'C:\Windows\Temp\*' -Recurse -Force -ErrorAction SilentlyContinue;
@@ -139,17 +138,17 @@ function Repair-WindowsUpdate {
          Start-Service bits"
 }
 
-function Create-RestorePoint {
+function New-RestorePoint {
     Invoke-WithSpinner -Description "Creating Restore Point" -Command `
         "Checkpoint-Computer -Description 'WinRepairPro' -RestorePointType MODIFY_SETTINGS"
 }
 
-function Run-Diagnostics {
+function Start-Diagnostics {
     Invoke-WithSpinner -Description "System Diagnostics" -Command `
         "systeminfo; Get-EventLog -LogName System -Newest 20"
 }
 
-function Run-Win-Repair {
+function Start-Win-Repair {
     $summary = @()
 
     Invoke-SystemRepairTask "dism.exe" "/Online","/Cleanup-Image","/CheckHealth" "Image Check Health" ([ref]$summary)
@@ -175,7 +174,7 @@ function Run-Win-Repair {
     Write-Host "===========================================================" -ForegroundColor Yellow
 }
 
-function End-Program {
+function Exit-Program {
     Stop-Transcript
     Write-Host "Exiting Program..." -ForegroundColor Blue
     exit
@@ -192,8 +191,8 @@ function Show-Menu {
     Write-Host "===                        V 1.0                        ===" -ForegroundColor Yellow
     Write-Host "===========================================================" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "  [1]  - Run Windows Full Repair" -ForegroundColor Green
-    Write-Host "  [2]  - Cleanup Temporary Files" -ForegroundColor Green
+    Write-Host "  [1]  - Start Windows Full Repair" -ForegroundColor Green
+    Write-Host "  [2]  - Remove Temporary Files" -ForegroundColor Green
     Write-Host "  [3]  - DISM CheckHealth" -ForegroundColor DarkGray 
     Write-Host "  [4]  - DISM ScanHealth" -ForegroundColor DarkGray 
     Write-Host "  [5]  - DISM RestoreHealth" -ForegroundColor DarkGray 
@@ -201,9 +200,9 @@ function Show-Menu {
     Write-Host "  [7]  - Component Cleanup + ResetBase" -ForegroundColor DarkGray 
     Write-Host "  [8]  - Repair Network Stack" -ForegroundColor Magenta  
     Write-Host "  [9]  - Repair Windows Update" -ForegroundColor Magenta 
-    Write-Host "  [10] - Create System Restore Point" -ForegroundColor DarkYellow 
-    Write-Host "  [11] - Run Diagnostics" -ForegroundColor cyan 
-    Write-Host "  [12] - Run SFC" -ForegroundColor DarkGreen 
+    Write-Host "  [10] - New System Restore Point" -ForegroundColor DarkYellow 
+    Write-Host "  [11] - Start Diagnostics" -ForegroundColor cyan 
+    Write-Host "  [12] - Start SFC" -ForegroundColor DarkGreen 
     Write-Host "  [0]  - Exit" -ForegroundColor Blue
     Write-Host ""
 }
@@ -211,24 +210,25 @@ function Show-Menu {
 # ---------------------------
 # Execution Loop
 # ---------------------------
+
 while ($true) {
     Show-Menu
     $choice = Read-Host "  -----> Select an option"
 
     switch ($choice) {
-        1 { Run-Win-Repair }
-        2 { Cleanup-TempFiles }
-        3 { Run-DISM-CheckHealth }
-        4 { Run-DISM-ScanHealth }
-        5 { Run-DISM-RestoreHealth }
-        6 { Run-ComponentCleanup }
-        7 { Run-ComponentCleanup-ResetBase }
+        1 { Start-Win-Repair }
+        2 { Remove-TempFiles }
+        3 { Start-DISM-CheckHealth }
+        4 { Start-DISM-ScanHealth }
+        5 { Start-DISM-RestoreHealth }
+        6 { Start-ComponentCleanup }
+        7 { Start-ComponentCleanup-ResetBase }
         8 { Repair-Network }
         9 { Repair-WindowsUpdate }
-        10 { Create-RestorePoint }
-        11 { Run-Diagnostics }
-        12 { Run-SFC }
-        0 { End-Program }
+        10 { New-RestorePoint }
+        11 { Start-Diagnostics }
+        12 { Start-SFC }
+        0 { Exit-Program }
         default { Write-Bad "Invalid selection." }
     }
     Pause
