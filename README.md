@@ -1,108 +1,79 @@
-# Technification PowerShell Toolkit
+# ⚡Technification PowerShell Toolkit
 
-**technification-ps-toolkit** is the root repository for all PowerShell scripts developed under the *Technification* banner.  
-It is built on these principles: **safety, usability, and transparency**.
+**technification-ps-toolkit** is the root repository for all tested and working PowerShell scripts.
 
 ---
 
-## Philosophy
+## 🏗️ Design Philosophy
+
 Every script in this toolkit is designed with:
+
 - **Transparency** – every action is echoed and logged.
 - **Safety** – backups before deletion, reversible processes.
 - **Auditability** – timestamped logs for traceability.
-- **User Control** – prompts and modular design for customization.
+- **User Control** – prompts and modular design for customisation.
 
 ---
 
-## 🔧 Windows toolbox
+## 🔧 Windows toolbox Collection
+
 - Windows Auto Repair Tool Pro
 - Windows Event Log Cleaner Tool Pro
 
 ---
 
-## Directory Map  
-```
+## 📂 Directory Map  
+
+```text
 technification-ps-toolkit/
 │
 ├── src/
-│   ├── Public/
-│   │   ├── <PublicFunction1>.ps1
-│   │   ├── <PublicFunction2>.ps1
-│   │   └── ...
-│   │
-│   ├── Private/
-│   │   ├── <PrivateHelper1>.ps1
-│   │   ├── <PrivateHelper2>.ps1
-│   │   └── ...
-│   │
-│   ├── technification-ps-toolkit.psd1        # Module manifest
-│   └── technification-ps-toolkit.psm1        # Module loader (imports Public/Private)
+│   ├── event-log-clearner/
+│   │   ├── event-log-clearner.ps1   # PowerShell Script
+│   │   └── README.md                # Tool Manual
+│   │ 
+│   └── win-auto-rerpair/
+│       ├── README.md                # Tool Manual
+│       └── win-auto-repair.ps1      # PowerShell Script 
 │
-├── tests/
-│   ├── Unit/
-│   │   ├── <Function1>.Tests.ps1
-│   │   ├── <Function2>.Tests.ps1
-│   │   └── ...
-│   │
-│   ├── Integration/
-│   │   └── <IntegrationTests>.ps1
-│   │
-│   └── Pester.psd1                           # Pester configuration
-│
-├── docs/
-│   ├── <Function1>.md
-│   ├── <Function2>.md
-│   └── ...
-│
-├── build/
-│   ├── build.ps1                             # Build script (packaging, manifest update)
-│   ├── version.json                          # Versioning metadata
-│   └── changelog-template.md                 # Auto-release notes template
-│
-├── output/
-│   └── (auto-generated release artifacts)
-│
-├── .github/
-│   └── workflows/
-│       ├── test.yml                          # CI: ScriptAnalyzer + Pester + multi-version
-│       ├── release.yml                       # CD: Auto-release on tag push
-│       └── docs.yml                          # Auto-generate documentation
-│
-├── .config/
-│   ├── ScriptAnalyzerSettings.psd1           # Enterprise-grade linting rules
-│   └── CodeSigning.json                      # Optional: signing profile
-│
-├── .vscode/
-│   ├── settings.json                         # Formatter, linting, Pester integration
-│   └── extensions.json                       # Recommended extensions
-│
-├── CHANGELOG.md
-├── README.md
-├── LICENSE
-└── CONTRIBUTING.md
+├── README.md                        # This file
+└── LICENSE                          # Repository Licence
 ```
 
 ---
 
-## Getting Started
+## 📦 Setup Instructions
+
 1. Clone the repo:
+
    ```bash
    git clone https://github.com/DJW1080/technification-ps-toolkit.git
+   ```
 
 2. Navigate to the script you want to run.
-3. Review the script header for usage notes.
-4. Run in PowerShell with appropriate permissions.
+3. Run in PowerShell as Adminisitrator.
 
 ---
 
-## 📜 License
-This project is licensed under the MIT License – see the LICENSE file for details.
+## 📝 Author
+
+**Dean John Weiniger** _– blending decades of experiance with meticulous PowerShell scripting._  
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0003--4733--1421-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0003-4733-1421)  
 
 ---
 
-## Author  
-### Dean John Weiniger – blending decades of hands-on engineering with meticulous PowerShell scripting.
+## 📜 Licence
+
+This work is dedicated to the public domain under the **Creative Commons Zero (CC0 1.0 Universal)** licence.  
+[![License: CC0 1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
+
+**You are free to:**  
+✅ Copy, modify, distribute, and build upon the material, for any purpose, without restrictions.  
+✅ Use the concept in commercial or non‑commercial projects.  
+✅ Incorporate it into standards, frameworks, or other works without attribution requirements.  
+
+🔗 Full licence text: [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)
 
 ---
 
-_last Update: 30-01-2026_
+### _Last Updated: 11-02-2026_
