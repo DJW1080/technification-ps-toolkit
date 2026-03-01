@@ -97,7 +97,6 @@ Then option [2] to delete temporary files.
 
 Created by **Dean John Weiniger**  
 Part of the **Technification PowerShell Toolkit**  
-Contributions welcome  
 
 ## 📜 Licence
 

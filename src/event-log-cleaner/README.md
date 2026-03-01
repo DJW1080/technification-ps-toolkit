@@ -63,8 +63,7 @@ cd .\technification-ps-toolkit\src\event-log-cleaner\
 ## 📝 Credits
 
 Created by **Dean John Weiniger**  
-Part of the **Technification PowerShell Toolkit**  
-Contributions welcome  
+Part of the **Technification PowerShell Toolkit**
 
 ## 📜 Licence
 
@@ -83,4 +82,4 @@ This work is dedicated to the public domain under the **Creative Commons CC0 1.0
 
 ---
 
-### _Last updated: 21-01-2026_
+### _Last updated: 24-02-2026_

@@ -56,7 +56,8 @@ function Invoke-WithSpinner {
 
     if ($ps.ExitCode -eq 0) {
         Write-Good "$Description completed."
-    } else {
+    }
+    else {
         Write-Bad "$Description failed. Check log for details: $ActionLog"
     }
 }
@@ -72,11 +73,12 @@ function Invoke-SystemRepairTask {
     $p = Start-Process -FilePath $Command -ArgumentList $Arguments -NoNewWindow -Wait -PassThru
 
     if ($p.ExitCode -eq 0) {
-         $status = "✅ $Label completed successfully."
-         Write-Host $status -ForegroundColor Green
-    } else {
-         $status = "❌ $Label failed with exit code $($p.ExitCode)."
-         Write-Host $status -ForegroundColor Red
+        $status = "✅ $Label completed successfully."
+        Write-Host $status -ForegroundColor Green
+    }
+    else {
+        $status = "❌ $Label failed with exit code $($p.ExitCode)."
+        Write-Host $status -ForegroundColor Red
     }
 
     $Results.Value += $status
@@ -86,33 +88,33 @@ function Invoke-SystemRepairTask {
 # Native-progress tasks (SFC & DISM)
 # ---------------------------
 function Start-SFC {
-         Write-Info "Running System File Checker..."
-         sfc /scannow
+    Write-Info "Running System File Checker..."
+    sfc /scannow
 }
 
 function Start-DISM-CheckHealth { 
-         Write-Info "Running Image Check Health..."
-         DISM /Online /Cleanup-Image /CheckHealth
+    Write-Info "Running Image Check Health..."
+    DISM /Online /Cleanup-Image /CheckHealth
 }
 
-function Start-DISM-ScanHealth  {
-         Write-Info "Running Image Scan Health..."
-         DISM /Online /Cleanup-Image /ScanHealth
+function Start-DISM-ScanHealth {
+    Write-Info "Running Image Scan Health..."
+    DISM /Online /Cleanup-Image /ScanHealth
 }
 	
 function Start-DISM-RestoreHealth {
-         Write-Info "Running Image Restore Health..."
-         DISM /Online /Cleanup-Image /RestoreHealth 
+    Write-Info "Running Image Restore Health..."
+    DISM /Online /Cleanup-Image /RestoreHealth 
 }
 
 function Start-ComponentCleanup {
-         Write-Info "Running Component Cleanup..."
-         DISM /Online /Cleanup-Image /StartComponentCleanup
+    Write-Info "Running Component Cleanup..."
+    DISM /Online /Cleanup-Image /StartComponentCleanup
 }
 
 function Start-ComponentCleanup-ResetBase {
-         Write-Info "Running Component Reset Base..."	
-         DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase
+    Write-Info "Running Component Reset Base..."	
+    DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase
 }
 
 function Remove-TempFiles {
@@ -151,23 +153,25 @@ function Start-Diagnostics {
 function Start-Win-Repair {
     $summary = @()
 
-    Invoke-SystemRepairTask "dism.exe" "/Online","/Cleanup-Image","/CheckHealth" "Image Check Health" ([ref]$summary)
-    Invoke-SystemRepairTask "dism.exe" "/Online","/Cleanup-Image","/ScanHealth" "Image Scan Health" ([ref]$summary)
-    Invoke-SystemRepairTask "dism.exe" "/Online","/Cleanup-Image","/RestoreHealth" "Image Restore Health" ([ref]$summary)
+    Invoke-SystemRepairTask "dism.exe" "/Online", "/Cleanup-Image", "/CheckHealth" "Image Check Health" ([ref]$summary)
+    Invoke-SystemRepairTask "dism.exe" "/Online", "/Cleanup-Image", "/ScanHealth" "Image Scan Health" ([ref]$summary)
+    Invoke-SystemRepairTask "dism.exe" "/Online", "/Cleanup-Image", "/RestoreHealth" "Image Restore Health" ([ref]$summary)
     Invoke-SystemRepairTask "sfc.exe" "/scannow" "System File Checker" ([ref]$summary)
     Invoke-SystemRepairTask "sfc.exe" "/scannow" "System File Checker (Second Run)" ([ref]$summary)
-    Invoke-SystemRepairTask "dism.exe" "/Online","/Cleanup-Image","/AnalyzeComponentStore" "Analyze Component Store" ([ref]$summary)
-    Invoke-SystemRepairTask "dism.exe" "/Online","/Cleanup-Image","/StartComponentCleanup" "Component Cleanup" ([ref]$summary)
-    Invoke-SystemRepairTask "dism.exe" "/Online","/Cleanup-Image","/StartComponentCleanup","/ResetBase" "Component Reset Base" ([ref]$summary)
+    Invoke-SystemRepairTask "dism.exe" "/Online", "/Cleanup-Image", "/AnalyzeComponentStore" "Analyze Component Store" ([ref]$summary)
+    Invoke-SystemRepairTask "dism.exe" "/Online", "/Cleanup-Image", "/StartComponentCleanup" "Component Cleanup" ([ref]$summary)
+    Invoke-SystemRepairTask "dism.exe" "/Online", "/Cleanup-Image", "/StartComponentCleanup", "/ResetBase" "Component Reset Base" ([ref]$summary)
 
     Write-Host ""
     Write-Host "========================= SUMMARY =========================" -ForegroundColor Yellow
     foreach ($line in $summary) {
         if ($line -like "✅*") {
             Write-Host $line -ForegroundColor Green
-        } elseif ($line -like "❌*") {
+        }
+        elseif ($line -like "❌*") {
             Write-Host $line -ForegroundColor Red
-        } else {
+        }
+        else {
             Write-Host $line
         }
     }
