@@ -53,12 +53,6 @@ windows-enhancements/
 └── README.md                       Module documentation.
 ```
 
-## ⚡ Run Directly
-
-```powershell
-pwsh -File .\win-enhancements-v1.ps1
-```
-
 ## 👨‍💻 Requirements
 
 - Windows 10 or Windows 11

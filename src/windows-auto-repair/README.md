@@ -66,12 +66,6 @@ windows-auto-repair/
 └── README.md                       Module documentation.
 ```
 
-## ⚡ Run Directly
-
-```powershell
-pwsh -File .\win-auto-repair-v1.ps1
-```
-
 ## 👨‍💻 Requirements
 
 - Windows 10 or Windows 11

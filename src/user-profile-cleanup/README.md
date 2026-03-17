@@ -13,8 +13,7 @@ User Profile Cleanup is the current-user temp and cache cleanup module.
 ## 📦 Run Script Directly
 
 ```powershell
-pwsh -File .\user-profile-cleanup-v2.ps
-rofile-cleanup-v2.ps1`
+pwsh -File .\user-profile-cleanup-v2.ps1
 ```
 
 ## 📋 Current Menu

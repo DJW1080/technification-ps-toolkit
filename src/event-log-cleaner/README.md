@@ -12,9 +12,9 @@ Event Log Cleaner is the event-log maintenance module.
 
 ## 📦 Run Script Directly
 
-```osps
-powerps
-       Zh -File .\event-log-cleaner-v2.ps1`
+```powershell
+pwsh -File .\event-log-cleaner-v2.ps1
+```
 
 ## 📋 Current Menu
 
