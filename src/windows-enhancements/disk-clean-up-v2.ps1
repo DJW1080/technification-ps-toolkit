@@ -1,10 +1,10 @@
 <#
     Script Name     : disk-clean-up-v2.ps1
-    Description     : Safer Windows disk cleanup tool for Technification Toolbox
+    Description     : Disk cleanup tool for Technification Toolbox
     Author          : Dean John Weiniger
-    Version         : 2.1
+    Version         : 2.2
     Type            : PowerShell 7
-    Date            : 2026-03-12
+    Date            : 2026-03-16
 #>
 
 Set-StrictMode -Version Latest
@@ -44,12 +44,16 @@ function Get-PathStats {
     }
 
     $items = @(Get-ChildItem -LiteralPath $Path -Recurse -Force -ErrorAction SilentlyContinue | Where-Object { -not $_.PSIsContainer })
-    $bytes = ($items | Measure-Object -Property Length -Sum).Sum
-    if ($null -eq $bytes) { $bytes = 0 }
+    $bytes = [int64]0
+    foreach ($item in $items) {
+        if ($null -ne $item.Length) {
+            $bytes += [int64]$item.Length
+        }
+    }
 
     return [pscustomobject]@{
         Files = $items.Count
-        Bytes = [int64]$bytes
+        Bytes = $bytes
     }
 }
 
@@ -124,9 +128,43 @@ function Start-CleanMgrProfile {
     Start-Process -FilePath $cleanMgr.Source -ArgumentList '/sagerun:1' -NoNewWindow -Wait
 }
 
-function Clear-TempFolders {
+function Clear-SystemTempFolders {
     Remove-Item "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
     Remove-Item 'C:\Windows\Temp\*' -Recurse -Force -ErrorAction SilentlyContinue
+}
+
+function Clear-UserTempAndCaches {
+    $userProfile = [Environment]::GetFolderPath('UserProfile')
+    $targets = @(
+        (Join-Path $userProfile 'AppData\Local\Temp\*'),
+        (Join-Path $userProfile 'AppData\Local\Microsoft\Windows\INetCache\*'),
+        (Join-Path $userProfile 'AppData\Local\Microsoft\Windows\WebCache\*')
+    )
+
+    foreach ($target in $targets) {
+        Remove-Item $target -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Clear-ThumbnailCache {
+    $path = Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\Microsoft\Windows\Explorer'
+    Get-ChildItem -LiteralPath $path -Filter 'thumbcache_*' -Force -ErrorAction SilentlyContinue |
+        Remove-Item -Force -ErrorAction SilentlyContinue
+}
+
+function Clear-DirectXShaderCache {
+    $userProfile = [Environment]::GetFolderPath('UserProfile')
+    $paths = @(
+        (Join-Path $userProfile 'AppData\Local\D3DSCache'),
+        (Join-Path $userProfile 'AppData\Local\NVIDIA\DXCache'),
+        (Join-Path $userProfile 'AppData\Local\NVIDIA\GLCache')
+    )
+
+    foreach ($path in $paths) {
+        if (Test-Path -LiteralPath $path) {
+            Remove-Item (Join-Path $path '*') -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
 }
 
 function Clear-DeliveryOptimizationCache {
@@ -139,6 +177,7 @@ function Clear-DeliveryOptimizationCache {
     Stop-Service -Name dosvc -Force -ErrorAction Stop
     try {
         Remove-Item 'C:\Windows\SoftwareDistribution\DeliveryOptimization\*' -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item 'C:\ProgramData\Microsoft\Windows\DeliveryOptimization\Cache\*' -Recurse -Force -ErrorAction SilentlyContinue
     }
     finally {
         Start-Service -Name dosvc -ErrorAction SilentlyContinue
@@ -161,6 +200,34 @@ function Clear-WindowsUpdateDownloadCache {
     }
 }
 
+function Clear-WerFiles {
+    $userProfile = [Environment]::GetFolderPath('UserProfile')
+    $paths = @(
+        'C:\ProgramData\Microsoft\Windows\WER',
+        (Join-Path $userProfile 'AppData\Local\Microsoft\Windows\WER')
+    )
+
+    foreach ($path in $paths) {
+        if (Test-Path -LiteralPath $path) {
+            Remove-Item (Join-Path $path '*') -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+function Clear-SystemLogs {
+    $paths = @(
+        'C:\Windows\Logs\CBS',
+        'C:\Windows\Logs\DISM'
+    )
+
+    foreach ($path in $paths) {
+        if (Test-Path -LiteralPath $path) {
+            Get-ChildItem -LiteralPath $path -File -Force -ErrorAction SilentlyContinue |
+                Remove-Item -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
 function Clear-RecycleBinSafe {
     Clear-RecycleBin -Force -ErrorAction SilentlyContinue
 }
@@ -178,9 +245,8 @@ function Start-StorageSenseTask {
 Assert-Administrator
 
 Write-Host ''
-Write-Host '================ SAFE DISK CLEANUP =================' -ForegroundColor White
-Write-Host 'Driver-store deletion has been removed from this tool.' -ForegroundColor Yellow
-Write-Host 'This version keeps cleanup focused on temp data and caches.' -ForegroundColor Yellow
+Write-Host '=========================== DISK CLEANUP ============================' -ForegroundColor White
+Write-Host 'This cleanup focuses on temp data, caches, logs, and update leftovers.' -ForegroundColor Yellow
 Write-Host ''
 
 $results = @()
@@ -193,9 +259,33 @@ else {
 }
 
 $results += Invoke-CleanupStep -Label 'Running Disk Cleanup profile 1' -Action { Start-CleanMgrProfile }
-$results += Invoke-CleanupStep -Label 'Clearing temp folders' -Action { Clear-TempFolders } -TrackedPaths @($env:TEMP, 'C:\Windows\Temp')
-$results += Invoke-CleanupStep -Label 'Clearing Delivery Optimization cache' -Action { Clear-DeliveryOptimizationCache } -TrackedPaths @('C:\Windows\SoftwareDistribution\DeliveryOptimization')
+$results += Invoke-CleanupStep -Label 'Clearing system temp folders' -Action { Clear-SystemTempFolders } -TrackedPaths @($env:TEMP, 'C:\Windows\Temp')
+$results += Invoke-CleanupStep -Label 'Clearing current user temp and browser caches' -Action { Clear-UserTempAndCaches } -TrackedPaths @(
+    (Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\Temp'),
+    (Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\Microsoft\Windows\INetCache'),
+    (Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\Microsoft\Windows\WebCache')
+)
+$results += Invoke-CleanupStep -Label 'Clearing thumbnail cache' -Action { Clear-ThumbnailCache } -TrackedPaths @(
+    (Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\Microsoft\Windows\Explorer')
+)
+$results += Invoke-CleanupStep -Label 'Clearing DirectX shader cache' -Action { Clear-DirectXShaderCache } -TrackedPaths @(
+    (Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\D3DSCache'),
+    (Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\NVIDIA\DXCache'),
+    (Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\NVIDIA\GLCache')
+)
+$results += Invoke-CleanupStep -Label 'Clearing Delivery Optimization cache' -Action { Clear-DeliveryOptimizationCache } -TrackedPaths @(
+    'C:\Windows\SoftwareDistribution\DeliveryOptimization',
+    'C:\ProgramData\Microsoft\Windows\DeliveryOptimization\Cache'
+)
 $results += Invoke-CleanupStep -Label 'Clearing Windows Update download cache' -Action { Clear-WindowsUpdateDownloadCache } -TrackedPaths @('C:\Windows\SoftwareDistribution\Download')
+$results += Invoke-CleanupStep -Label 'Clearing Windows Error Reporting files' -Action { Clear-WerFiles } -TrackedPaths @(
+    'C:\ProgramData\Microsoft\Windows\WER',
+    (Join-Path ([Environment]::GetFolderPath('UserProfile')) 'AppData\Local\Microsoft\Windows\WER')
+)
+$results += Invoke-CleanupStep -Label 'Clearing CBS and DISM logs' -Action { Clear-SystemLogs } -TrackedPaths @(
+    'C:\Windows\Logs\CBS',
+    'C:\Windows\Logs\DISM'
+)
 $results += Invoke-CleanupStep -Label 'Emptying Recycle Bin' -Action { Clear-RecycleBinSafe }
 $results += Invoke-CleanupStep -Label 'Triggering Storage Sense cleanup' -Action { Start-StorageSenseTask }
 
@@ -223,5 +313,4 @@ Write-Host '---------------------------------------------------' -ForegroundColo
 Write-Host ("Total files removed   : {0}" -f $totalFiles) -ForegroundColor Cyan
 Write-Host ("Total space recovered : {0}" -f (Format-Size -Bytes ([int64]$totalBytes))) -ForegroundColor Cyan
 Write-Host ''
-Write-Good 'Safe disk cleanup complete.'
-
+Write-Good 'Disk cleanup complete.'

@@ -2,15 +2,20 @@
     Script Name     : user-profile-cleanup-v2.ps1
     Description     : Deep current user profile cleanup tool for Technification Toolbox
     Author          : Dean John Weiniger
-    Version         : 2.1
+    Version         : 2.2
     Type            : PowerShell 7
-    Date            : 2026-03-14
+    Date            : 2026-03-16
 #>
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'shared\menu-core.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'shared\logging-core.ps1')
+
+$script:ModuleName = 'user-profile-cleanup'
+$script:SessionLog = New-TechnificationLogFile -ModuleName $script:ModuleName -Prefix 'session'
+Write-TechnificationLog -Path $script:SessionLog -Level 'INFO' -Message 'User Profile Cleanup session started.'
 
 function Write-Info($Message) { Write-Host "[INFO]  $Message" -ForegroundColor Cyan }
 function Write-Good($Message) { Write-Host "[GOOD]  $Message" -ForegroundColor Green }
@@ -27,6 +32,15 @@ function Format-Size {
 
 $script:ExcludedPatterns = @('*.gitkeep')
 $script:LastLockedItems = @()
+
+function Write-ModuleLog {
+    param(
+        [Parameter(Mandatory)][string]$Level,
+        [Parameter(Mandatory)][string]$Message
+    )
+
+    Write-TechnificationLog -Path $script:SessionLog -Level $Level -Message $Message
+}
 
 function Get-CleanupTargets {
     $userProfile = [Environment]::GetFolderPath('UserProfile')
@@ -119,6 +133,7 @@ function Show-DeepScanReport {
     Write-Host ("Total files : {0}" -f $totalFiles) -ForegroundColor Cyan
     Write-Host ("Total size  : {0}" -f (Format-Size -Bytes $totalBytes)) -ForegroundColor Cyan
     Write-Host ''
+    Write-ModuleLog -Level 'INFO' -Message ("Deep scan completed. Files={0}; Size={1}" -f $totalFiles, $totalBytes)
 }
 
 function Show-CategorySummary {
@@ -137,12 +152,17 @@ function Show-CategorySummary {
         Write-Host ("  Size  : {0}" -f (Format-Size -Bytes $bytes)) -ForegroundColor DarkGray
     }
     Write-Host ''
+    Write-ModuleLog -Level 'INFO' -Message 'Category summary displayed.'
 }
 
 function Remove-CategoryItems {
     param([Parameter(Mandatory)][string]$Category)
     $targets = @(Get-CleanupTargets | Where-Object Category -eq $Category)
-    if (-not $targets) { Write-Warn 'No targets matched that category.'; return }
+    if (-not $targets) {
+        Write-Warn 'No targets matched that category.'
+        Write-ModuleLog -Level 'WARN' -Message ("Cleanup category '{0}' had no matching targets." -f $Category)
+        return
+    }
     $before = foreach ($target in $targets) { Get-TargetStats -Target $target }
     $script:LastLockedItems = @()
     foreach ($target in $targets) {
@@ -176,6 +196,7 @@ function Remove-CategoryItems {
     Write-Host ("Total space recovered : {0}" -f (Format-Size -Bytes $totalBytes)) -ForegroundColor Cyan
     Write-Host ("Locked/skipped files  : {0}" -f $script:LastLockedItems.Count) -ForegroundColor Cyan
     Write-Host ''
+    Write-ModuleLog -Level 'INFO' -Message ("Cleanup category '{0}' completed. FilesRemoved={1}; BytesRecovered={2}; Locked={3}" -f $Category, $totalFiles, $totalBytes, $script:LastLockedItems.Count)
 }
 
 function Show-LockedItems {
@@ -184,6 +205,7 @@ function Show-LockedItems {
     if (-not $script:LastLockedItems -or $script:LastLockedItems.Count -eq 0) {
         Write-Good 'No locked or skipped files recorded in the last cleanup run.'
         Write-Host ''
+        Write-ModuleLog -Level 'INFO' -Message 'Locked/skipped file view opened with no entries.'
         return
     }
     foreach ($item in $script:LastLockedItems | Select-Object -First 50) {
@@ -193,14 +215,20 @@ function Show-LockedItems {
     }
     if ($script:LastLockedItems.Count -gt 50) { Write-Warn 'Only the first 50 entries are shown.' }
     Write-Host ''
+    Write-ModuleLog -Level 'INFO' -Message ("Locked/skipped file view opened. Entries={0}" -f $script:LastLockedItems.Count)
 }
 
 function Add-ExclusionPattern {
     $pattern = Read-Host 'Enter a file pattern to exclude (example: *.log or keepme.tmp)'
     if ([string]::IsNullOrWhiteSpace($pattern)) { return }
-    if ($script:ExcludedPatterns -contains $pattern) { Write-Warn 'Pattern already exists.'; return }
+    if ($script:ExcludedPatterns -contains $pattern) {
+        Write-Warn 'Pattern already exists.'
+        Write-ModuleLog -Level 'WARN' -Message ("Exclusion '{0}' already existed." -f $pattern)
+        return
+    }
     $script:ExcludedPatterns += $pattern
     Write-Good ("Added exclusion: {0}" -f $pattern)
+    Write-ModuleLog -Level 'INFO' -Message ("Added exclusion pattern '{0}'." -f $pattern)
 }
 
 function Show-Exclusions {
@@ -208,22 +236,25 @@ function Show-Exclusions {
     Write-Host '================ EXCLUSIONS =================' -ForegroundColor White
     foreach ($pattern in $script:ExcludedPatterns) { Write-Host $pattern -ForegroundColor Cyan }
     Write-Host ''
+    Write-ModuleLog -Level 'INFO' -Message ("Displayed exclusions. Count={0}" -f $script:ExcludedPatterns.Count)
 }
 
 function Show-About {
     Write-Host ''
     Write-Host 'This tool performs a deeper current-user cleanup than v1.' -ForegroundColor Cyan
     Write-Host 'It supports category-based cleanup, exclusions, and locked-file reporting.'
+    Write-Host ("Logs    : {0}" -f (Get-TechnificationLogsPath)) -ForegroundColor DarkGray
+    Write-Host ("Reports : {0}" -f (Get-TechnificationReportsPath)) -ForegroundColor DarkGray
     Write-Host ''
+    Write-ModuleLog -Level 'INFO' -Message 'About page displayed.'
 }
 
 function Show-UserProfileCleanupPage {
-    $header = @(
-        '============================================================',
-        '================= USER PROFILE CLEANUP V2 ==================',
-        '============================================================'
+    $header = New-MenuHeader -Name 'User Profile Cleanup' -Version '2.2' -InfoLines @(
+        ("Logs    : {0}" -f (Get-TechnificationLogsPath)),
+        ("Reports : {0}" -f (Get-TechnificationReportsPath))
     )
-    Show-MenuPage -Title 'User Profile Cleanup Menu' -Items (& $script:GetUserProfileCleanupItems) -HeaderLines $header
+    Show-MenuPage -Title 'Cleanup Menu' -Items (& $script:GetUserProfileCleanupItems) -HeaderLines $header
 }
 
 $script:GetUserProfileCleanupItems = {
@@ -243,4 +274,11 @@ $script:GetUserProfileCleanupItems = {
     )
 }
 
-Invoke-MenuLoop -Render { Show-UserProfileCleanupPage } -GetItems $script:GetUserProfileCleanupItems
+try {
+    Invoke-MenuLoop -Render { Show-UserProfileCleanupPage } -GetItems $script:GetUserProfileCleanupItems
+}
+finally {
+    Write-ModuleLog -Level 'INFO' -Message 'User Profile Cleanup session ended.'
+}
+
+

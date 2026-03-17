@@ -1,4 +1,4 @@
-# User Profile Cleanup
+# ⚡ User Profile Cleanup 🧰
 
 ![PowerShell 7](https://img.shields.io/badge/Code-PowerShell-012456?logo=powershell "100% PowerShell")
 ![Windows OS](https://img.shields.io/badge/OS-Windows-0079d4?logo=windows "Runs on Windows")
@@ -6,23 +6,18 @@
 ![AMD](https://img.shields.io/badge/CPU-AMD-00a774?logo=amd "AMD Compatible")
 ![Made in Australia](https://img.shields.io/badge/Made%20In-Australia-blue?logo=australia "Made in Australia")
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
-![Version 1.0](https://img.shields.io/badge/Version-2.1-yellow?logo=version "Version 2.1")  
+![Version 2.2](https://img.shields.io/badge/Version-2.2-yellow?logo=version "Version 2.2")
 
-This module scans and cleans temporary and cache data in the current Windows user profile.
+User Profile Cleanup is the current-user temp and cache cleanup module.
 
-## Script
+## 📦 Run Script Directly
 
-- `user-profile-cleanup-v2.ps1`
-
-## Directory Layout
-
-```text
-user-profile-cleanup/
-├── user-profile-cleanup-v2.ps1     Current user profile cleanup submenu.
-└── README.md                       Module documentation.
+```powershell
+pwsh -File .\user-profile-cleanup-v2.ps
+rofile-cleanup-v2.ps1`
 ```
 
-## Current Menu
+## 📋 Current Menu
 
 ```text
 [1]  Deep Scan Current User Profile
@@ -39,7 +34,14 @@ user-profile-cleanup/
 [0]  Return To Toolbox
 ```
 
-## Cleanup Categories
+## 🕹️ What It Does
+
+- Runs a deeper size-based scan of the current user profile
+- Cleans by category instead of one broad delete pass
+- Tracks locked or skipped files
+- Supports exclusion patterns
+
+## 📋 Cleanup Categories
 
 - Temp
 - Browser Cache
@@ -47,25 +49,30 @@ user-profile-cleanup/
 - Crash Data
 - Logs
 
-## What It Does
+## 📂 Storage Layout
 
-- Runs a deeper size-based scan of the current user profile
-- Cleans by category instead of one broad delete pass
-- Tracks locked or skipped files
-- Supports exclusion patterns
+Shared runtime output is written to:
 
-## Run Directly
-
-```powershell
-pwsh -File .\src\user-profile-cleanup\user-profile-cleanup-v2.ps1
+```text
+C:\ProgramData\Technification\
+├── Logs
+└── Reports
 ```
 
-## Requirements
+## 📂 Directory Layout
+
+```text
+user-profile-cleanup/
+├── user-profile-cleanup-v2.ps1     Current user profile cleanup submenu.
+└── README.md                       Module documentation.
+```
+
+## 👨‍💻 Requirements
 
 - Windows 10 or Windows 11
 - PowerShell 7
 
-## Notes
+## 📋 Notes
 
 - This module only targets the current user profile.
 - Locked files may require closing the related app before rerunning cleanup.

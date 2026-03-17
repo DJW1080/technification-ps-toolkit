@@ -24,6 +24,30 @@ function New-MenuItem {
     }
 }
 
+function New-MenuHeader {
+    param(
+        [Parameter(Mandatory)][string]$Name,
+        [string]$Version = '',
+        [string[]]$InfoLines = @()
+    )
+
+    $divider = '============================================================'
+    $lines = @($divider, $Name)
+
+    if (-not [string]::IsNullOrWhiteSpace($Version)) {
+        $lines += ('Version: {0}' -f $Version)
+    }
+
+    foreach ($line in $InfoLines) {
+        if (-not [string]::IsNullOrWhiteSpace($line)) {
+            $lines += $line
+        }
+    }
+
+    $lines += $divider
+    return $lines
+}
+
 function Show-MenuPage {
     param(
         [Parameter(Mandatory)][string]$Title,
@@ -36,6 +60,10 @@ function Show-MenuPage {
     if ($ClearScreen) { Clear-Host }
     foreach ($line in $HeaderLines) {
         Write-Host $line
+    }
+
+    if ($HeaderLines.Count -gt 0) {
+        Write-Host ''
     }
 
     Write-Host $Title -ForegroundColor White

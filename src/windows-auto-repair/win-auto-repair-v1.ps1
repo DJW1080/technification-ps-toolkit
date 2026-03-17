@@ -3,25 +3,45 @@
     Description     : Windows Automated Image Repair Tool
     Main functions  : Repairs Windows image health, cleans temp files, and runs support diagnostics
     Author          : Dean John Weiniger
-    Version         : 1.2
+    Version         : 1.3
     Type            : PowerShell 7
-    Date            : 2026-03-14
+    Date            : 2026-03-16
 #>
-
-$LogRoot = Join-Path $env:LOCALAPPDATA 'Win-Auto-Repair'
-if (!(Test-Path $LogRoot)) { New-Item -ItemType Directory -Path $LogRoot | Out-Null }
-$SessionLog = Join-Path $LogRoot ('session-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
-Start-Transcript -Path $SessionLog -Force | Out-Null
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'shared\menu-core.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'shared\logging-core.ps1')
+
+$script:ModuleName = 'windows-auto-repair'
+$script:SessionLog = New-TechnificationLogFile -ModuleName $script:ModuleName -Prefix 'session'
+$script:TranscriptLog = New-TechnificationLogFile -ModuleName $script:ModuleName -Prefix 'transcript'
+$script:TranscriptStarted = $false
+Write-TechnificationLog -Path $script:SessionLog -Level 'INFO' -Message 'Windows Auto Repair session started.'
+
+try {
+    Start-Transcript -Path $script:TranscriptLog -Force | Out-Null
+    $script:TranscriptStarted = $true
+    Write-TechnificationLog -Path $script:SessionLog -Level 'INFO' -Message ("Transcript started at '{0}'." -f $script:TranscriptLog)
+}
+catch {
+    Write-TechnificationLog -Path $script:SessionLog -Level 'ERROR' -Message ("Failed to start transcript: {0}" -f $_.Exception.Message)
+}
 
 function Write-Info($Message) { Write-Host "[INFO]  $Message" -ForegroundColor Cyan }
 function Write-Good($Message) { Write-Host "[GOOD]  $Message" -ForegroundColor Green }
 function Write-Bad($Message) { Write-Host "[FAIL]  $Message" -ForegroundColor Red }
 function Write-Warn($Message) { Write-Host "[WARN]  $Message" -ForegroundColor Yellow }
+
+function Write-ModuleLog {
+    param(
+        [Parameter(Mandatory)][string]$Level,
+        [Parameter(Mandatory)][string]$Message
+    )
+
+    Write-TechnificationLog -Path $script:SessionLog -Level $Level -Message $Message
+}
 
 function Test-IsAdministrator {
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -32,6 +52,7 @@ function Test-IsAdministrator {
 function Assert-Administrator {
     if (-not (Test-IsAdministrator)) {
         Write-Warn 'This tool works best when run as Administrator. Some repairs may fail without elevation.'
+        Write-ModuleLog -Level 'WARN' -Message 'Session started without elevation.'
     }
 }
 
@@ -41,11 +62,12 @@ function Invoke-WithSpinner {
         [Parameter(Mandatory)][string]$Command
     )
 
-    $ActionLog = Join-Path $LogRoot ('action-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
+    $actionLog = New-TechnificationLogFile -ModuleName $script:ModuleName -Prefix 'action'
     Write-Info "$Description started..."
-    Write-Info "Log: $ActionLog"
+    Write-Info "Log: $actionLog"
+    Write-ModuleLog -Level 'INFO' -Message ("Starting action '{0}'. ActionLog='{1}'" -f $Description, $actionLog)
 
-    $process = Start-Process powershell -ArgumentList '-NoLogo', '-Command', "$Command | Out-File -FilePath '$ActionLog' -Append -Encoding utf8" -PassThru -WindowStyle Hidden
+    $process = Start-Process powershell -ArgumentList '-NoLogo', '-Command', "$Command | Out-File -FilePath '$actionLog' -Append -Encoding utf8" -PassThru -WindowStyle Hidden
     $frames = @('|', '/', '-', '\')
     $index = 0
     while (!$process.HasExited) {
@@ -56,8 +78,14 @@ function Invoke-WithSpinner {
     }
     Write-Host "`r    " -NoNewline
 
-    if ($process.ExitCode -eq 0) { Write-Good "$Description completed." }
-    else { Write-Bad "$Description failed. Check log for details: $ActionLog" }
+    if ($process.ExitCode -eq 0) {
+        Write-Good "$Description completed."
+        Write-ModuleLog -Level 'INFO' -Message ("Action '{0}' completed successfully. ExitCode=0" -f $Description)
+    }
+    else {
+        Write-Bad "$Description failed. Check log for details: $actionLog"
+        Write-ModuleLog -Level 'ERROR' -Message ("Action '{0}' failed. ExitCode={1}; ActionLog='{2}'" -f $Description, $process.ExitCode, $actionLog)
+    }
 }
 
 function Invoke-SystemRepairTask {
@@ -69,31 +97,68 @@ function Invoke-SystemRepairTask {
     )
 
     Write-Info "Running $Label..."
+    Write-ModuleLog -Level 'INFO' -Message ("Starting repair task '{0}' using '{1} {2}'." -f $Label, $Command, ($Arguments -join ' '))
     $process = Start-Process -FilePath $Command -ArgumentList $Arguments -NoNewWindow -Wait -PassThru
     if ($process.ExitCode -eq 0) {
         $status = "[OK] $Label completed successfully."
         Write-Good $status
+        Write-ModuleLog -Level 'INFO' -Message ("Repair task '{0}' completed successfully." -f $Label)
     }
     else {
         $status = "[FAIL] $Label failed with exit code $($process.ExitCode)."
         Write-Bad $status
+        Write-ModuleLog -Level 'ERROR' -Message ("Repair task '{0}' failed with exit code {1}." -f $Label, $process.ExitCode)
     }
     $Results.Value += $status
 }
 
-function Start-SFC { Write-Info 'Running System File Checker...'; sfc /scannow }
-function Start-DISM-CheckHealth { Write-Info 'Running Image Check Health...'; DISM /Online /Cleanup-Image /CheckHealth }
-function Start-DISM-ScanHealth { Write-Info 'Running Image Scan Health...'; DISM /Online /Cleanup-Image /ScanHealth }
-function Start-DISM-RestoreHealth { Write-Info 'Running Image Restore Health...'; DISM /Online /Cleanup-Image /RestoreHealth }
-function Start-ComponentCleanup { Write-Info 'Running Component Cleanup...'; DISM /Online /Cleanup-Image /StartComponentCleanup }
-function Start-ComponentCleanup-ResetBase { Write-Info 'Running Component Cleanup with ResetBase...'; DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase }
+function Start-SFC {
+    Write-Info 'Running System File Checker...'
+    Write-ModuleLog -Level 'INFO' -Message 'Launching standalone SFC scan.'
+    sfc /scannow
+}
+
+function Start-DISM-CheckHealth {
+    Write-Info 'Running Image Check Health...'
+    Write-ModuleLog -Level 'INFO' -Message 'Launching DISM CheckHealth.'
+    DISM /Online /Cleanup-Image /CheckHealth
+}
+
+function Start-DISM-ScanHealth {
+    Write-Info 'Running Image Scan Health...'
+    Write-ModuleLog -Level 'INFO' -Message 'Launching DISM ScanHealth.'
+    DISM /Online /Cleanup-Image /ScanHealth
+}
+
+function Start-DISM-RestoreHealth {
+    Write-Info 'Running Image Restore Health...'
+    Write-ModuleLog -Level 'INFO' -Message 'Launching DISM RestoreHealth.'
+    DISM /Online /Cleanup-Image /RestoreHealth
+}
+
+function Start-ComponentCleanup {
+    Write-Info 'Running Component Cleanup...'
+    Write-ModuleLog -Level 'INFO' -Message 'Launching DISM StartComponentCleanup.'
+    DISM /Online /Cleanup-Image /StartComponentCleanup
+}
+
+function Start-ComponentCleanup-ResetBase {
+    Write-Info 'Running Component Cleanup with ResetBase...'
+    Write-ModuleLog -Level 'INFO' -Message 'Launching DISM StartComponentCleanup ResetBase.'
+    DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase
+}
 
 function Remove-TempFiles {
     Invoke-WithSpinner -Description 'Temporary File Remover' -Command "Remove-Item '$env:TEMP\*' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'C:\Windows\Temp\*' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'C:\Windows\SoftwareDistribution\Download\*' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'C:\Windows\Prefetch\*' -Recurse -Force -ErrorAction SilentlyContinue"
 }
 
-function Repair-Network { Invoke-WithSpinner -Description 'Network Stack Reset' -Command 'netsh winsock reset; netsh int ip reset' }
-function Clear-DNSCache { Invoke-WithSpinner -Description 'DNS Cache Flush' -Command 'ipconfig /flushdns; Clear-DnsClientCache' }
+function Repair-Network {
+    Invoke-WithSpinner -Description 'Network Stack Reset' -Command 'netsh winsock reset; netsh int ip reset'
+}
+
+function Clear-DNSCache {
+    Invoke-WithSpinner -Description 'DNS Cache Flush' -Command 'ipconfig /flushdns; Clear-DnsClientCache'
+}
 
 function Repair-WindowsUpdate {
     Invoke-WithSpinner -Description 'Windows Update Repair' -Command "Stop-Service wuauserv -Force; Stop-Service bits -Force; Stop-Service cryptsvc -Force -ErrorAction SilentlyContinue; Remove-Item 'C:\Windows\SoftwareDistribution' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'C:\Windows\System32\catroot2' -Recurse -Force -ErrorAction SilentlyContinue; Start-Service cryptsvc -ErrorAction SilentlyContinue; Start-Service wuauserv; Start-Service bits"
@@ -107,11 +172,16 @@ function Start-Diagnostics {
     Invoke-WithSpinner -Description 'System Diagnostics' -Command 'systeminfo; Get-Volume; Get-PhysicalDisk -ErrorAction SilentlyContinue; Get-EventLog -LogName System -Newest 20'
 }
 
-function Start-DiskCheckScan { Write-Info 'Running online disk scan on C: ...'; chkdsk C: /scan }
+function Start-DiskCheckScan {
+    Write-Info 'Running online disk scan on C: ...'
+    Write-ModuleLog -Level 'INFO' -Message 'Launching CHKDSK online scan on C:.'
+    chkdsk C: /scan
+}
 
 function Export-SystemHealthReport {
-    $reportPath = Join-Path $LogRoot ('health-report-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.txt')
+    $reportPath = New-TechnificationReportFile -ModuleName $script:ModuleName -Prefix 'health-report' -Extension 'txt'
     Write-Info 'Building system health report...'
+    Write-ModuleLog -Level 'INFO' -Message ("Building system health report at '{0}'." -f $reportPath)
     @(
         '================ SYSTEM HEALTH REPORT ================',
         "Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')",
@@ -132,19 +202,23 @@ function Export-SystemHealthReport {
     Add-Content -Path $reportPath -Value "`r`n--- RECENT SYSTEM EVENTS ---"
     Get-EventLog -LogName System -Newest 30 | Format-Table TimeGenerated, EntryType, Source, EventID, Message -Wrap | Out-String | Add-Content -Path $reportPath
     Write-Good "System health report exported to: $reportPath"
+    Write-ModuleLog -Level 'INFO' -Message ("System health report exported to '{0}'." -f $reportPath)
 }
 
 function Start-RecommendedMaintenance {
     Write-Info 'Starting recommended maintenance sequence...'
+    Write-ModuleLog -Level 'INFO' -Message 'Starting recommended maintenance sequence.'
     New-RestorePoint
     Start-Win-Repair
     Remove-TempFiles
     Clear-DNSCache
     Write-Good 'Recommended maintenance sequence finished.'
+    Write-ModuleLog -Level 'INFO' -Message 'Recommended maintenance sequence finished.'
 }
 
 function Start-Win-Repair {
     $summary = @()
+    Write-ModuleLog -Level 'INFO' -Message 'Starting full Windows repair sequence.'
     Invoke-SystemRepairTask -Command 'dism.exe' -Arguments @('/Online', '/Cleanup-Image', '/CheckHealth') -Label 'Image Check Health' -Results ([ref]$summary)
     Invoke-SystemRepairTask -Command 'dism.exe' -Arguments @('/Online', '/Cleanup-Image', '/ScanHealth') -Label 'Image Scan Health' -Results ([ref]$summary)
     Invoke-SystemRepairTask -Command 'dism.exe' -Arguments @('/Online', '/Cleanup-Image', '/RestoreHealth') -Label 'Image Restore Health' -Results ([ref]$summary)
@@ -161,21 +235,17 @@ function Start-Win-Repair {
         else { Write-Host $line }
     }
     Write-Host '===========================================================' -ForegroundColor Yellow
+    Write-ModuleLog -Level 'INFO' -Message ("Full Windows repair sequence finished. SummaryCount={0}" -f $summary.Count)
 }
 
 function Show-WindowsRepairPage {
-    $header = @(
-        '================================================================================================',
-        ' __        ___           _                        _         _                        _   _      ',
-        ' \ \      / (_)_ __   __| | _____      _____     / \  _   _| |_ ___  _ __ ___   __ _| |_(_) ___ ',
-        '  \ \ /\ / /| | ''  \ / _'' |/ _ \ \ /\ / / __|   / _ \| | | | __/ _ \| ''_ '' _ \ / _'' | __| |/ __|',
-        '   \ V  V / | | | | | (_| | (_) \ V  V /\__ \  / ___ \ |_| | || (_) | | | | | | (_| | |_| | (__ ',
-        '    \_/\_/  |_|_| |_|\__,_|\___/ \_/\_/ |___/ /_/   \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___|',
-        '================================================================================================',
-        '=== Main Menu - recommended: [13] for a full pass, or [1] then [2] manually                 ===',
-        '================================================================================================'
+    $header = New-MenuHeader -Name 'Windows Auto Repair' -Version '1.3' -InfoLines @(
+        'Recommended: [13] full pass, or [1] then [2] manually',
+        ("Logs       : {0}" -f (Get-TechnificationLogsPath)),
+        ("Reports    : {0}" -f (Get-TechnificationReportsPath)),
+        ("Transcript : {0}" -f $script:TranscriptLog)
     )
-    Show-MenuPage -Title 'Windows Auto Repair Menu' -Items (& $script:GetRepairItems) -HeaderLines $header
+    Show-MenuPage -Title 'Repair Menu' -Items (& $script:GetRepairItems) -HeaderLines $header
 }
 
 $script:GetRepairItems = {
@@ -201,5 +271,16 @@ $script:GetRepairItems = {
 }
 
 Assert-Administrator
-Invoke-MenuLoop -Render { Show-WindowsRepairPage } -GetItems $script:GetRepairItems
-Stop-Transcript
+
+try {
+    Invoke-MenuLoop -Render { Show-WindowsRepairPage } -GetItems $script:GetRepairItems
+}
+finally {
+    Write-ModuleLog -Level 'INFO' -Message 'Windows Auto Repair session ended.'
+    if ($script:TranscriptStarted) {
+        try { Stop-Transcript | Out-Null }
+        catch { }
+    }
+}
+
+
