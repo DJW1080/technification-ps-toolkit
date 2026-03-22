@@ -8,7 +8,7 @@
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
 ![Version 1.5](https://img.shields.io/badge/Version-1.5-yellow?logo=version "Version 1.5")
 
-Windows Enhancements is the convenience and tweaks module.
+Windows Enhancements - Tweaks module.
 
 ## 📦 Run Script Directly
 
@@ -32,16 +32,6 @@ pwsh -File  .\win-enhancements-v1.ps1
 - Checks and changes hibernation state
 - Runs the disk cleanup workflow
 
-## 📂 Storage Layout
-
-Shared runtime output is written to:
-
-```text
-C:\ProgramData\Technification\
-├── Logs
-└── Reports
-```
-
 ## 📂 Directory Layout
 
 ```text
@@ -53,11 +43,19 @@ windows-enhancements/
 └── README.md                       Module documentation.
 ```
 
+Reports and Logs output is written to:
+
+```text
+C:\ProgramData\Technification\
+├── Logs
+└── Reports
+```
+
 ## 👨‍💻 Requirements
 
-- Windows 10 or Windows 11
+- Windows 11
 - PowerShell 7
-- Administrator rights
+- Administrator
 
 ## 📝 Notes
 

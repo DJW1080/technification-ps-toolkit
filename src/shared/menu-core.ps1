@@ -114,7 +114,7 @@ function Invoke-MenuLoop {
 
         if ($selected.Action) {
             $result = & $selected.Action
-            if ($result -eq '__EXIT_MENU__') {
+            if ($result -is [string] -and $result -ceq '__EXIT_MENU__') {
                 $shouldExit = $true
                 continue
             }

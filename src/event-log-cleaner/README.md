@@ -8,7 +8,7 @@
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
 ![Version 2.2](https://img.shields.io/badge/Version-2.2-yellow?logo=version "Version 2.2")
 
-Event Log Cleaner is the event-log maintenance module.
+Event Log Cleaner - Cleans all logs from the Event Viewer.
 
 ## 📦 Run Script Directly
 
@@ -41,22 +41,6 @@ pwsh -File .\event-log-cleaner-v2.ps1
 - Saves and reloads exclusion settings
 - Resets exclusions to defaults
 
-## 📂 Storage Layout
-
-Shared logs are written to:
-
-```text
-C:\ProgramData\Technification\
-├── Logs
-└── Reports
-```
-
-This module also stores exclusions config under:
-
-```text
-C:\ProgramData\Technification\EventLogCleaner\config.json
-```
-
 ## 📂 Directory Layout
 
 ```text
@@ -65,11 +49,21 @@ event-log-cleaner/
 └── README.md                       Module documentation.
 ```
 
+Config and Logs are written to:
+
+```text
+C:\ProgramData\Technification\
+├── EventLogCleaner\
+│   └── config.json
+├── Logs
+└── Reports
+```
+
 ## 👨‍💻 Requirements
 
-- Windows 10 or Windows 11
+- Windows 11
 - PowerShell 7
-- Administrator rights for live log clearing
+- Administrator
 
 ## 📝 Notes
 

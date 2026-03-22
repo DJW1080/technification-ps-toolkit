@@ -2,7 +2,7 @@
     Script Name     : technification-toolbox.ps1
     Description     : Main launcher for Technification Toolbox utilities
     Author          : Dean John Weiniger
-    Version         : 1.8
+    Version         : 1.9
     Type            : PowerShell 7
     Date            : 2026-03-14
 #>
@@ -23,7 +23,7 @@ function Test-IsAdministrator {
     return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-$toolboxVersion = '1.8'
+$toolboxVersion = '1.9'
 $toolRoot = Join-Path $PSScriptRoot 'src'
 $tools = @(
     [pscustomobject]@{ Id = '1'; Name = 'Windows Auto Repair'; Version = '1.2'; Description = 'DISM, SFC, cleanup, diagnostics, and repair tasks'; Path = Join-Path $toolRoot 'windows-auto-repair\win-auto-repair-v1.ps1' }
@@ -31,6 +31,7 @@ $tools = @(
     [pscustomobject]@{ Id = '3'; Name = 'Event Log Cleaner'; Version = '2.1'; Description = 'Event log cleanup with exclusions, config, and dry-run support'; Path = Join-Path $toolRoot 'event-log-cleaner\event-log-cleaner-v2.ps1' }
     [pscustomobject]@{ Id = '4'; Name = 'Windows Enhancements'; Version = '1.4'; Description = 'Context-menu tools, hibernation controls, and safe cleanup'; Path = Join-Path $toolRoot 'windows-enhancements\win-enhancements-v1.ps1' }
     [pscustomobject]@{ Id = '5'; Name = 'Network Diagnostics Suite'; Version = '1.1'; Description = 'Connectivity checks, reports, and TCP port scanning'; Path = Join-Path $toolRoot 'network-diagnostics\network-diagnostics-v1.ps1' }
+    [pscustomobject]@{ Id = '6'; Name = 'Winget Maintenance'; Version = '1.0'; Description = 'Automated Winget source refresh, upgrade, and reporting actions'; Path = Join-Path $toolRoot 'winget-maintenance\winget-maintenance-v1.ps1' }
 )
 
 function Get-AdminModeLabel {
@@ -96,6 +97,7 @@ $script:GetToolboxItems = {
         (New-MenuItem -Key '3' -Label 'Event Log Cleaner' -Description 'v2.1  Event log cleanup with exclusions, config, and dry-run support' -Action { Start-Tool -Id '3' })
         (New-MenuItem -Key '4' -Label 'Windows Enhancements' -Description 'v1.4  Context-menu tools, hibernation controls, and safe cleanup' -Action { Start-Tool -Id '4' })
         (New-MenuItem -Key '5' -Label 'Network Diagnostics Suite' -Description 'v1.1  Connectivity checks, reports, and TCP port scanning' -Action { Start-Tool -Id '5' })
+        (New-MenuItem -Key '6' -Label 'Winget Maintenance' -Description 'v1.0  Automated Winget source refresh, upgrade, and reporting actions' -Action { Start-Tool -Id '6' })
         (New-MenuItem -Key '9' -Label 'About' -Action { Show-About } -Color 'Cyan')
         (New-MenuItem -Key '0' -Label 'Exit' -Action { Write-Host 'Exiting Technification Toolbox...' -ForegroundColor Blue; return '__EXIT_MENU__' } -Color 'Blue')
     )

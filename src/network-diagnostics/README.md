@@ -8,7 +8,7 @@
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
 ![Version 1.2](https://img.shields.io/badge/Version-1.2-yellow?logo=version "Version 1.2")
 
-Network Diagnostics Suite is the connectivity and port-testing module.
+Network Diagnostics - Reset connectivity and port-testing module.
 
 ## 📦 Run Script Directly
 
@@ -40,16 +40,6 @@ pwsh -file .\network-diagnostics-v1.ps1
 - Exports a network report
 - Runs a quick health check across the main diagnostics
 
-## 📂 Storage Layout
-
-Shared runtime output is written to:
-
-```text
-C:\ProgramData\Technification\
-├── Logs
-└── Reports
-```
-
 ## 📂 Directory Layout
 
 ```text
@@ -58,8 +48,16 @@ network-diagnostics/
 └── README.md                       Module documentation.
 ```
 
+Reports and Logs output is written to:
+
+```text
+C:\ProgramData\Technification\
+├── Logs
+└── Reports
+```
+
 ## 👨‍💻 Requirements
 
-- Windows 10 or Windows 11
+- Windows 11
 - PowerShell 7
-- Administrator rights recommended for complete visibility
+- Administrator

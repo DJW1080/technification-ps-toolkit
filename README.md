@@ -8,7 +8,7 @@
 ![AMD](https://img.shields.io/badge/CPU-AMD-00a774?logo=amd "AMD Compatible")
 ![Made in Australia](https://img.shields.io/badge/Made%20In-Australia-blue?logo=australia "Made in Australia")
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
-![Version 1.8](https://img.shields.io/badge/Version-1.8-yellow?logo=version "Version 1.8")
+![Version 1.9](https://img.shields.io/badge/Version-1.9-yellow?logo=version "Version 1.9")
 
 Technification PowerShell Toolkit is a collection of PowerShell utilities.  
 Designed for **Beginners** and **Professionals** it features a single launcher and module submenus.  
@@ -21,10 +21,11 @@ Automating Windows maintenance and repair tasks using a **Menu-driven Interface*
 - `Event Log Cleaner` (`v2.2`)
 - `Windows Enhancements` (`v1.5`)
 - `Network Diagnostics Suite` (`v1.2`)
+- `Winget Maintenance` (`v1.0`)
 
 ## 📦 Run Script Directly
 
-Run the toolbox from the repository root:
+Run from the repository root:
 
 ```powershell
 pwsh -File .\technification-toolbox.ps1
@@ -40,18 +41,9 @@ Top-level menu:
 [3] Event Log Cleaner
 [4] Windows Enhancements
 [5] Network Diagnostics Suite
+[6] Winget Maintenance
 [9] About
 [0] Exit
-```
-
-## 📂 Storage Layout
-
-Shared runtime output is written to:
-
-```text
-C:\ProgramData\Technification\
-├── Logs
-└── Reports
 ```
 
 ## 📂 Directory Layout
@@ -78,17 +70,28 @@ technification-ps-toolkit/
 │   │   ├── check-hibernation-v1.ps1     Hibernation control helper.
 │   │   ├── disk-clean-up-v2.ps1         Disk cleanup workflow.
 │   │   └── README.md                    Module documentation.
+│   ├── winget-maintenance/
+│   │   ├── winget-maintenance-v1.ps1    Winget maintenance submenu.
+│   │   └── README.md                    Module documentation.
 │   └── network-diagnostics/
 │       ├── network-diagnostics-v1.ps1   Network diagnostics submenu.
 │       └── README.md                    Module documentation.
 └── README.md                            Project overview.
 ```
 
+Report and Logs output is written to:
+
+```text
+C:\ProgramData\Technification\
+├── Logs
+└── Reports
+```
+
 ## 👨‍💻 Requirements
 
-- Windows 10 or Windows 11
+- Windows 11
 - PowerShell 7
-- Administrator rights for repair, cleanup, registry, hibernation, and some network actions
+- Administrator
 
 ## 📝 Notes
 
@@ -118,7 +121,7 @@ This work is dedicated to the public domain under the:
 Created by **Dean John Weiniger**.  
 With the use of:
 
-- Codex - based on GPT-5
+- Codex - based on GPT-5.4
 - Copilot
 
 ---
