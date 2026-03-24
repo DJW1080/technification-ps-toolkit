@@ -8,7 +8,7 @@
 ![AMD](https://img.shields.io/badge/CPU-AMD-00a774?logo=amd "AMD Compatible")
 ![Made in Australia](https://img.shields.io/badge/Made%20In-Australia-blue?logo=australia "Made in Australia")
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
-![Version 1.8](https://img.shields.io/badge/Version-1.8-yellow?logo=version "Version 1.8")
+![Version 1.9](https://img.shields.io/badge/Version-1.9-yellow?logo=version "Version 1.9")
 
 Technification PowerShell Toolkit is a collection of PowerShell utilities.  
 Designed for **Beginners** and **Professionals** it features a single launcher and module submenus.  
@@ -21,6 +21,7 @@ Automating Windows maintenance and repair tasks using a **Menu-driven Interface*
 - `Event Log Cleaner` (`v2.2`)
 - `Windows Enhancements` (`v1.5`)
 - `Network Diagnostics Suite` (`v1.2`)
+- `Winget Maintenance` (`v1.0`)
 
 ## 📦 Run Script Directly
 
@@ -40,6 +41,7 @@ Top-level menu:
 [3] Event Log Cleaner
 [4] Windows Enhancements
 [5] Network Diagnostics Suite
+[6] Winget Maintenance
 [9] About
 [0] Exit
 ```
@@ -77,6 +79,9 @@ technification-ps-toolkit/
 │   │   ├── open-ps-admin-here-v1.ps1    Explorer context-menu helper.
 │   │   ├── check-hibernation-v1.ps1     Hibernation control helper.
 │   │   ├── disk-clean-up-v2.ps1         Disk cleanup workflow.
+│   │   └── README.md                    Module documentation.
+│   ├── winget-maintenance/
+│   │   ├── winget-maintenance-v1.ps1    Winget maintenance submenu.
 │   │   └── README.md                    Module documentation.
 │   └── network-diagnostics/
 │       ├── network-diagnostics-v1.ps1   Network diagnostics submenu.

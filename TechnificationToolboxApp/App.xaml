@@ -1,0 +1,96 @@
+<Application
+    x:Class="TechnificationToolboxApp.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TechnificationToolboxApp">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="CorporateBlueBrush" Color="#0F5EA8" />
+                    <SolidColorBrush x:Key="CorporateBlueSoftBrush" Color="#DCEBFA" />
+                    <SolidColorBrush x:Key="CorporateBlueSurfaceBrush" Color="#EEF5FC" />
+                    <SolidColorBrush x:Key="CorporateBlueStrokeBrush" Color="#93B9DE" />
+                    <SolidColorBrush x:Key="AppPageBackgroundBrush" Color="#F4F8FC" />
+                    <SolidColorBrush x:Key="CommandSurfaceBrush" Color="#E7F1FB" />
+                    <SolidColorBrush x:Key="CommandSurfaceStrokeBrush" Color="#8CB3D9" />
+                    <SolidColorBrush x:Key="ConsoleBackgroundBrush" Color="#233B8E" />
+                    <SolidColorBrush x:Key="ConsoleBorderBrush" Color="#6B7DE0" />
+                    <SolidColorBrush x:Key="ConsoleForegroundBrush" Color="#B8D6FF" />
+                    <SolidColorBrush x:Key="ConsoleCommandBrush" Color="#D9DDFF" />
+                    <SolidColorBrush x:Key="ConsoleInfoBrush" Color="#7DD8FF" />
+                    <SolidColorBrush x:Key="ConsoleGoodBrush" Color="#8CFF95" />
+                    <SolidColorBrush x:Key="ConsoleWarnBrush" Color="#FFE082" />
+                    <SolidColorBrush x:Key="ConsoleFailBrush" Color="#FF9090" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="CorporateBlueBrush" Color="#79B8FF" />
+                    <SolidColorBrush x:Key="CorporateBlueSoftBrush" Color="#14365C" />
+                    <SolidColorBrush x:Key="CorporateBlueSurfaceBrush" Color="#102845" />
+                    <SolidColorBrush x:Key="CorporateBlueStrokeBrush" Color="#33679E" />
+                    <SolidColorBrush x:Key="AppPageBackgroundBrush" Color="#08192B" />
+                    <SolidColorBrush x:Key="CommandSurfaceBrush" Color="#0F2946" />
+                    <SolidColorBrush x:Key="CommandSurfaceStrokeBrush" Color="#2F5D8E" />
+                    <SolidColorBrush x:Key="ConsoleBackgroundBrush" Color="#1F327B" />
+                    <SolidColorBrush x:Key="ConsoleBorderBrush" Color="#6680F0" />
+                    <SolidColorBrush x:Key="ConsoleForegroundBrush" Color="#C3D9FF" />
+                    <SolidColorBrush x:Key="ConsoleCommandBrush" Color="#DFE2FF" />
+                    <SolidColorBrush x:Key="ConsoleInfoBrush" Color="#84DAFF" />
+                    <SolidColorBrush x:Key="ConsoleGoodBrush" Color="#90FFA5" />
+                    <SolidColorBrush x:Key="ConsoleWarnBrush" Color="#FFD97A" />
+                    <SolidColorBrush x:Key="ConsoleFailBrush" Color="#FF8F8F" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+            <Thickness x:Key="PagePadding">8,6,10,10</Thickness>
+
+            <Style x:Key="PageTitleTextBlockStyle"
+                   TargetType="TextBlock">
+                <Setter Property="FontSize" Value="26" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="{ThemeResource CorporateBlueBrush}" />
+            </Style>
+
+            <Style x:Key="SectionTitleTextBlockStyle"
+                   TargetType="TextBlock">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="{ThemeResource CorporateBlueBrush}" />
+            </Style>
+
+            <Style x:Key="SecondaryTextBlockStyle"
+                   TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+            </Style>
+
+            <Style x:Key="CompactPageButtonStyle"
+                   TargetType="Button">
+                <Setter Property="MinWidth" Value="88" />
+                <Setter Property="Padding" Value="12,8" />
+                <Setter Property="Background" Value="{ThemeResource CorporateBlueBrush}" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderBrush" Value="{ThemeResource CorporateBlueStrokeBrush}" />
+            </Style>
+
+            <Style x:Key="CompactCommandBarStyle"
+                   TargetType="CommandBar">
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="DefaultLabelPosition" Value="Right" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0,-4,0,0" />
+                <Setter Property="Background" Value="{ThemeResource CommandSurfaceBrush}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource CommandSurfaceStrokeBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="10" />
+            </Style>
+
+            <Style TargetType="NavigationView">
+                <Setter Property="Background" Value="{ThemeResource AppPageBackgroundBrush}" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

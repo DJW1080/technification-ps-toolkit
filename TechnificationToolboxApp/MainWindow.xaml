@@ -1,0 +1,83 @@
+<Window
+    x:Class="TechnificationToolboxApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Technification Toolbox">
+
+    <NavigationView x:Name="RootNavigationView"
+                    PaneDisplayMode="Left"
+                    OpenPaneLength="176"
+                    CompactPaneLength="44"
+                    IsBackButtonVisible="Collapsed"
+                    IsSettingsVisible="False"
+                    SelectionChanged="RootNavigationView_SelectionChanged">
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Home" Tag="overview">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Home" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Repair" Tag="auto-repair"
+                                ToolTipService.ToolTip="Windows Auto Repair">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Repair" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Profiles" Tag="profile-cleanup"
+                                ToolTipService.ToolTip="User Profile Cleanup">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Contact" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Events" Tag="event-log"
+                                ToolTipService.ToolTip="Event Log Cleaner">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="List" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Enhance" Tag="enhancements"
+                                ToolTipService.ToolTip="Windows Enhancements">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Setting" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Network" Tag="network"
+                                ToolTipService.ToolTip="Network Diagnostics">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Map" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Winget" Tag="winget"
+                                ToolTipService.ToolTip="Winget Maintenance">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Download" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="About" Tag="about">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Help" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.MenuItems>
+
+        <NavigationView.PaneFooter>
+            <Button x:Name="RestartAsAdminButton"
+                    Style="{StaticResource CompactPageButtonStyle}"
+                    Margin="12,0,12,12"
+                    HorizontalAlignment="Stretch"
+                    Click="RestartAsAdminButton_Click"
+                    ToolTipService.ToolTip="Restart the app with Administrator rights.">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <SymbolIcon Symbol="Setting" />
+                    <TextBlock Text="Run as Admin" />
+                </StackPanel>
+            </Button>
+        </NavigationView.PaneFooter>
+
+        <Frame x:Name="ContentFrame"
+               Background="{ThemeResource AppPageBackgroundBrush}" />
+    </NavigationView>
+</Window>

@@ -1,0 +1,91 @@
+<Page
+    x:Class="TechnificationToolboxApp.Pages.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="{StaticResource PagePadding}"
+          RowSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="About"
+                   Style="{StaticResource PageTitleTextBlockStyle}" />
+
+        <TextBlock Grid.Row="1"
+                   Margin="0,4,0,0"
+                   Text="WinUI shell over the working toolkit, with native pages replacing the modules that benefit from direct in-app control."
+                   TextWrapping="Wrap"
+                   Style="{StaticResource SecondaryTextBlockStyle}" />
+
+        <CommandBar Grid.Row="2"
+                    Style="{StaticResource CompactCommandBarStyle}">
+            <AppBarButton Label="Scripts"
+                          Click="OpenScriptsButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="OpenFile" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton Label="Logs"
+                          Click="OpenLogsButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Folder" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton Label="Reports"
+                          Click="OpenReportsButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Document" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+        </CommandBar>
+
+        <Grid Grid.Row="3"
+              Margin="0,12,0,0"
+              ColumnSpacing="14"
+              RowSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Workspace" />
+            <TextBlock x:Name="WorkspaceRootTextBlock"
+                       Grid.Column="1"
+                       TextWrapping="Wrap" />
+
+            <TextBlock Grid.Row="1"
+                       Text="Scripts" />
+            <TextBlock x:Name="ScriptsRootTextBlock"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       TextWrapping="Wrap" />
+
+            <TextBlock Grid.Row="2"
+                       Text="Logs" />
+            <TextBlock x:Name="LogsPathTextBlock"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       TextWrapping="Wrap" />
+
+            <TextBlock Grid.Row="3"
+                       Text="Reports" />
+            <TextBlock x:Name="ReportsPathTextBlock"
+                       Grid.Row="3"
+                       Grid.Column="1"
+                       TextWrapping="Wrap" />
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,246 @@
+<Page
+    x:Class="TechnificationToolboxApp.Pages.AutoRepairPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:TechnificationToolboxApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="{StaticResource PagePadding}"
+          RowSpacing="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Windows Auto Repair"
+                       Style="{StaticResource PageTitleTextBlockStyle}" />
+            <TextBlock Margin="0,6,0,0"
+                       Text="DISM, SFC, repairs, and health reporting from a native page."
+                       TextWrapping="Wrap"
+                       Style="{StaticResource SecondaryTextBlockStyle}" />
+        </StackPanel>
+
+        <CommandBar x:Name="AutoRepairCommandBar"
+                    Grid.Row="1"
+                    Style="{StaticResource CompactCommandBarStyle}">
+            <AppBarButton x:Name="RecommendedButton"
+                          Label="Recommended"
+                          Click="RecommendedButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Play" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="FullRepairButton"
+                          Label="Full Repair"
+                          Click="FullRepairButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Repair" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="SfcButton"
+                          Label="SFC"
+                          Click="SfcButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Accept" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="RestoreHealthButton"
+                          Label="Restore"
+                          Click="RestoreHealthButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Sync" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="ExportReportButton"
+                          Label="Report"
+                          Click="ExportReportButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Document" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="CheckHealthButton"
+                              Label="CheckHealth"
+                              Click="CheckHealthButton_Click" />
+                <AppBarButton x:Name="ScanHealthButton"
+                              Label="ScanHealth"
+                              Click="ScanHealthButton_Click" />
+                <AppBarButton x:Name="CleanupButton"
+                              Label="Cleanup"
+                              Click="CleanupButton_Click" />
+                <AppBarButton x:Name="ResetBaseButton"
+                              Label="ResetBase"
+                              Click="ResetBaseButton_Click" />
+                <AppBarButton x:Name="TempFilesButton"
+                              Label="Temp Files"
+                              Click="TempFilesButton_Click" />
+                <AppBarButton x:Name="NetworkResetButton"
+                              Label="Network"
+                              Click="NetworkResetButton_Click" />
+                <AppBarButton x:Name="WindowsUpdateButton"
+                              Label="Win Update"
+                              Click="WindowsUpdateButton_Click" />
+                <AppBarButton x:Name="RestorePointButton"
+                              Label="Restore Point"
+                              Click="RestorePointButton_Click" />
+                <AppBarButton x:Name="DiagnosticsButton"
+                              Label="Diagnostics"
+                              Click="DiagnosticsButton_Click" />
+                <AppBarButton x:Name="FlushDnsButton"
+                              Label="Flush DNS"
+                              Click="FlushDnsButton_Click" />
+                <AppBarButton x:Name="ChkDskButton"
+                              Label="CHKDSK"
+                              Click="ChkDskButton_Click" />
+                <AppBarSeparator />
+                <AppBarButton Label="Reports"
+                              Click="OpenReportsButton_Click" />
+                <AppBarButton Label="Logs"
+                              Click="OpenLogsButton_Click" />
+                <AppBarButton Label="Legacy"
+                              Click="LegacyMenuButton_Click" />
+                <AppBarButton Label="Refresh"
+                              Click="RefreshStatusButton_Click" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+
+        <Grid Grid.Row="2"
+              ColumnSpacing="14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.15*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Admin" />
+                <TextBlock x:Name="AdminStatusTextBlock"
+                           Grid.Column="1"
+                           Margin="10,0,0,0" />
+
+                <TextBlock Grid.Row="1"
+                           Text="Logs"
+                           Margin="0,8,0,0" />
+                <TextBlock x:Name="LogsPathTextBlock"
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           Margin="10,8,0,0"
+                           TextWrapping="Wrap" />
+
+                <TextBlock Grid.Row="2"
+                           Text="Reports"
+                           Margin="0,8,0,0" />
+                <TextBlock x:Name="ReportsPathTextBlock"
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           Margin="10,8,0,0"
+                           TextWrapping="Wrap" />
+            </Grid>
+
+            <StackPanel Grid.Column="1"
+                        Spacing="6">
+                <CheckBox x:Name="CreateRestorePointCheckBox"
+                          Content="Create restore point before repair sequences"
+                          IsChecked="True" />
+                <TextBlock Text="Applies to Recommended and Full Repair. Individual one-off actions are unchanged."
+                           TextWrapping="Wrap"
+                           Style="{StaticResource SecondaryTextBlockStyle}" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="3"
+              RowSpacing="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ProgressBar x:Name="BusyProgressBar"
+                         Visibility="Collapsed"
+                         IsIndeterminate="True" />
+
+            <Grid Grid.Row="1"
+                  ColumnSpacing="14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="320" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0"
+                      RowSpacing="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Activity"
+                               Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <controls:ActivityConsole x:Name="OutputConsole"
+                                             Grid.Row="1" />
+                </Grid>
+
+                <ScrollViewer Grid.Column="1"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Run Status"
+                                   Style="{StaticResource SectionTitleTextBlockStyle}" />
+                        <TextBlock Text="Last action"
+                                   Margin="0,10,0,0" />
+                        <TextBlock x:Name="LastActionTextBlock"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Last result"
+                                   Margin="0,12,0,0" />
+                        <TextBlock x:Name="LastResultTextBlock"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Reports"
+                                   Margin="0,12,0,0" />
+                        <TextBox x:Name="ReportPathsTextBox"
+                                 Margin="0,6,0,0"
+                                 AcceptsReturn="True"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"
+                                 MinHeight="110"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,14,0,0">
+                            <Button x:Name="OpenLatestReportButton"
+                                    Content="Latest"
+                                    Style="{StaticResource CompactPageButtonStyle}"
+                                    Click="OpenLatestReportButton_Click" />
+                            <Button Margin="12,0,0,0"
+                                    Content="Reports"
+                                    Style="{StaticResource CompactPageButtonStyle}"
+                                    Click="OpenReportsButton_Click" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,10,0,0">
+                            <Button Content="Logs"
+                                    Style="{StaticResource CompactPageButtonStyle}"
+                                    Click="OpenLogsButton_Click" />
+                            <Button Margin="12,0,0,0"
+                                    Content="Legacy"
+                                    Style="{StaticResource CompactPageButtonStyle}"
+                                    Click="LegacyMenuButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
+

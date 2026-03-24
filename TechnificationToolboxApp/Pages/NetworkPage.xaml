@@ -1,0 +1,279 @@
+<Page
+    x:Class="TechnificationToolboxApp.Pages.NetworkPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:TechnificationToolboxApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="{StaticResource PagePadding}"
+          RowSpacing="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Network Diagnostics"
+                       Style="{StaticResource PageTitleTextBlockStyle}" />
+            <TextBlock Margin="0,6,0,0"
+                       Text="Core network checks with visible output and report export."
+                       TextWrapping="Wrap"
+                       Style="{StaticResource SecondaryTextBlockStyle}" />
+        </StackPanel>
+
+        <CommandBar x:Name="NetworkCommandBar"
+                    Grid.Row="1"
+                    Style="{StaticResource CompactCommandBarStyle}">
+            <AppBarButton x:Name="SummaryButton"
+                          Label="Summary"
+                          Click="SummaryButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="View" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="GatewayButton"
+                          Label="Gateway"
+                          Click="GatewayButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Sync" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="DnsButton"
+                          Label="DNS"
+                          Click="DnsButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="World" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="InternetButton"
+                          Label="Internet"
+                          Click="InternetButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Map" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="ConnectionsButton"
+                          Label="TCP"
+                          Click="ConnectionsButton_Click">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Switch" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="CommonPortsButton"
+                              Label="Common Ports"
+                              Click="CommonPortsButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Find" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton x:Name="CustomPortsButton"
+                              Label="Custom Ports"
+                              Click="CustomPortsButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Find" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton x:Name="QuickCheckButton"
+                              Label="Quick Check"
+                              Click="QuickCheckButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Accept" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton x:Name="ExportReportButton"
+                              Label="Report"
+                              Click="ExportReportButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Document" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarSeparator />
+                <AppBarButton Label="Reports"
+                              Click="OpenReportsButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Folder" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Label="Logs"
+                              Click="OpenLogsButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Folder" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Label="Legacy"
+                              Click="LegacyMenuButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="OpenFile" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Label="Refresh"
+                              Click="RefreshStatusButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Refresh" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+
+        <Grid Grid.Row="2"
+              ColumnSpacing="14"
+              RowSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.1*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Adapters" />
+                <TextBlock x:Name="AdapterCountTextBlock"
+                           Grid.Column="1"
+                           Margin="10,0,0,0" />
+
+                <TextBlock Grid.Row="1"
+                           Text="Logs"
+                           Margin="0,8,0,0" />
+                <TextBlock x:Name="LogsPathTextBlock"
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           Margin="10,8,0,0"
+                           TextWrapping="Wrap" />
+
+                <TextBlock Grid.Row="2"
+                           Text="Reports"
+                           Margin="0,8,0,0" />
+                <TextBlock x:Name="ReportsPathTextBlock"
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           Margin="10,8,0,0"
+                           TextWrapping="Wrap" />
+            </Grid>
+
+            <Grid Grid.Column="1"
+                  ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBox x:Name="DnsHostTextBox"
+                         Header="DNS"
+                         PlaceholderText="openai.com" />
+                <TextBox x:Name="ScanTargetTextBox"
+                         Grid.Column="1"
+                         Header="Scan"
+                         PlaceholderText="localhost" />
+                <TextBox x:Name="PingTargetTextBox"
+                         Grid.Row="1"
+                         Header="Ping"
+                         PlaceholderText="1.1.1.1"
+                         Margin="0,8,0,0" />
+                <TextBox x:Name="CustomPortsTextBox"
+                         Grid.Row="1"
+                         Grid.Column="1"
+                         Header="Ports"
+                         PlaceholderText="22,80,443,3389"
+                         Margin="0,8,0,0" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="3"
+              RowSpacing="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ProgressBar x:Name="BusyProgressBar"
+                         Visibility="Collapsed"
+                         IsIndeterminate="True" />
+
+            <Grid Grid.Row="1"
+                  ColumnSpacing="14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="320" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0"
+                      RowSpacing="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Activity"
+                               Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <controls:ActivityConsole x:Name="OutputConsole"
+                                             Grid.Row="1" />
+                </Grid>
+
+                <ScrollViewer Grid.Column="1"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Run Status"
+                                   Style="{StaticResource SectionTitleTextBlockStyle}" />
+                        <TextBlock Text="Last action"
+                                   Margin="0,10,0,0" />
+                        <TextBlock x:Name="LastActionTextBlock"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Last result"
+                                   Margin="0,12,0,0" />
+                        <TextBlock x:Name="LastResultTextBlock"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Reports"
+                                   Margin="0,12,0,0" />
+                        <TextBox x:Name="ReportPathsTextBox"
+                                 Margin="0,6,0,0"
+                                 AcceptsReturn="True"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"
+                                 MinHeight="110"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,14,0,0">
+                            <Button x:Name="OpenLatestReportButton"
+                                    Content="Latest"
+                                    Style="{StaticResource CompactPageButtonStyle}"
+                                    Click="OpenLatestReportButton_Click" />
+                            <Button Margin="12,0,0,0"
+                                    Content="Reports"
+                                    Style="{StaticResource CompactPageButtonStyle}"
+                                    Click="OpenReportsButton_Click" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,10,0,0">
+                            <Button Content="Logs"
+                                    Style="{StaticResource CompactPageButtonStyle}"
+                                    Click="OpenLogsButton_Click" />
+                            <Button Margin="12,0,0,0"
+                                    Content="Legacy"
+                                    Style="{StaticResource CompactPageButtonStyle}"
+                                    Click="LegacyMenuButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
+

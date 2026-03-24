@@ -1,0 +1,18 @@
+# Build output
+**/bin/
+**/obj/
+
+# Local tool caches
+.dotnet-home/
+.nuget/
+.vs/
+
+# Local diagnostics
+build-winui.log
+WinUiTemplateSmoke/
+
+# Visual Studio user state
+*.user
+*.suo
+*.userosscache
+*.sln.docstates

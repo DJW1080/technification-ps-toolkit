@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TechnificationToolboxApp (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "TechnificationToolboxApp (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
