@@ -8,7 +8,7 @@
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
 ![Version 2.2](https://img.shields.io/badge/Version-2.2-yellow?logo=version "Version 2.2")
 
-User Profile Cleanup is the current-user temp and cache cleanup module.
+User Profile Cleanup - Cleans up temp files in the user profile.
 
 ## 📦 Run Script Directly
 
@@ -48,16 +48,6 @@ pwsh -File .\user-profile-cleanup-v2.ps1
 - Crash Data
 - Logs
 
-## 📂 Storage Layout
-
-Shared runtime output is written to:
-
-```text
-C:\ProgramData\Technification\
-├── Logs
-└── Reports
-```
-
 ## 📂 Directory Layout
 
 ```text
@@ -66,10 +56,19 @@ user-profile-cleanup/
 └── README.md                       Module documentation.
 ```
 
+Report and Logs output is written to:
+
+```text
+C:\ProgramData\Technification\
+├── Logs
+└── Report
+```
+
 ## 👨‍💻 Requirements
 
-- Windows 10 or Windows 11
+- Windows 11
 - PowerShell 7
+- Administrator
 
 ## 📋 Notes
 

@@ -1,6 +1,6 @@
 # Winget Maintenance
 
-Winget Maintenance is the package maintenance module for Technification Toolbox.
+Winget Maintenance is the package maintenance module for Technification Toolbox. It automates common Winget upkeep tasks from the toolbox menu or as a standalone script.
 
 ## Run Script Directly
 
@@ -36,4 +36,4 @@ pwsh -File .\winget-maintenance-v1.ps1
 - Windows 10 or Windows 11
 - PowerShell 7
 - Winget / App Installer installed
-- Administrator rights recommended
+- Administrator rights recommended for some actions

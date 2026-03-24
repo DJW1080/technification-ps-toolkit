@@ -25,7 +25,7 @@ Automating Windows maintenance and repair tasks using a **Menu-driven Interface*
 
 ## 📦 Run Script Directly
 
-Run the toolbox from the repository root:
+Run from the repository root:
 
 ```powershell
 pwsh -File .\technification-toolbox.ps1
@@ -44,16 +44,6 @@ Top-level menu:
 [6] Winget Maintenance
 [9] About
 [0] Exit
-```
-
-## 📂 Storage Layout
-
-Shared runtime output is written to:
-
-```text
-C:\ProgramData\Technification\
-├── Logs
-└── Reports
 ```
 
 ## 📂 Directory Layout
@@ -89,11 +79,19 @@ technification-ps-toolkit/
 └── README.md                            Project overview.
 ```
 
+Report and Logs output is written to:
+
+```text
+C:\ProgramData\Technification\
+├── Logs
+└── Reports
+```
+
 ## 👨‍💻 Requirements
 
-- Windows 10 or Windows 11
+- Windows 11
 - PowerShell 7
-- Administrator rights for repair, cleanup, registry, hibernation, and some network actions
+- Administrator
 
 ## 📝 Notes
 
@@ -123,7 +121,7 @@ This work is dedicated to the public domain under the:
 Created by **Dean John Weiniger**.  
 With the use of:
 
-- Codex - based on GPT-5
+- Codex - based on GPT-5.4
 - Copilot
 
 ---

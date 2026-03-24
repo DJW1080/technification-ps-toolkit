@@ -8,7 +8,7 @@
 ![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginners-1f883d?logo=beginners "Difficulty: Beginner")
 ![Version 1.3](https://img.shields.io/badge/Version-1.3-yellow?logo=version "Version 1.3")
 
-Windows Auto Repair is the repair and maintenance module.
+Windows Auto Repair is the repair - Fix coruptions, pepare for a backup.
 
 ## 📦 Run Script Directly
 
@@ -46,18 +46,6 @@ pwsh -file .\win-auto-repair-v1.ps1
 - Creates a restore point
 - Runs diagnostics and exports a health report
 
-## 📂 Storage Layout
-
-Shared runtime output is written to:
-
-```text
-C:\ProgramData\Technification\
-├── Logs
-└── Reports
-```
-
-This module also creates a separate transcript log during a session.
-
 ## 📂 Directory Layout
 
 ```text
@@ -66,11 +54,19 @@ windows-auto-repair/
 └── README.md                       Module documentation.
 ```
 
+Report and Logs output is written to:
+
+```text
+C:\ProgramData\Technification\
+├── Logs
+└── Reports
+```
+
 ## 👨‍💻 Requirements
 
-- Windows 10 or Windows 11
+- Windows 11
 - PowerShell 7
-- Administrator rights recommended
+- Administrator
 
 ## 📝 Notes
 
