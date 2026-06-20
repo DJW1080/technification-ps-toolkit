@@ -31,15 +31,14 @@ pwsh -file .\win-auto-repair-v1.ps1
 [10] New System Restore Point
 [11] Start Diagnostics
 [12] Start SFC
-[13] Recommended Maintenance Sequence
 [14] Flush DNS Cache
-[15] Start CHKDSK Online Scan
 [16] Export System Health Report
 [0]  Return To Toolbox
 ```
 
 ## 🕹️ What It Does
 
+- Option `1` runs the full repair sequence.
 - Runs DISM and SFC repair actions
 - Clears temporary files
 - Repairs network and Windows Update components
@@ -67,8 +66,3 @@ C:\ProgramData\Technification\
 - Windows 11
 - PowerShell 7
 - Administrator
-
-## 📝 Notes
-
-- Option `1` runs the full repair sequence.
-- Option `13` runs a broader maintenance sequence including restore point creation, repair, temp cleanup, and DNS cache flush.
