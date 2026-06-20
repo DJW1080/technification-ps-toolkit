@@ -14,7 +14,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'shared\menu-core.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'shared\logging-core.ps1')
 
-$script:ModuleName = 'windows-auto-repair'
+$script:ModuleName = 'win-auto-repair'
 $script:SessionLog = New-TechnificationLogFile -ModuleName $script:ModuleName -Prefix 'session'
 $script:TranscriptLog = New-TechnificationLogFile -ModuleName $script:ModuleName -Prefix 'transcript'
 $script:TranscriptStarted = $false
@@ -205,17 +205,6 @@ function Export-SystemHealthReport {
     Write-ModuleLog -Level 'INFO' -Message ("System health report exported to '{0}'." -f $reportPath)
 }
 
-function Start-RecommendedMaintenance {
-    Write-Info 'Starting recommended maintenance sequence...'
-    Write-ModuleLog -Level 'INFO' -Message 'Starting recommended maintenance sequence.'
-    New-RestorePoint
-    Start-Win-Repair
-    Remove-TempFiles
-    Clear-DNSCache
-    Write-Good 'Recommended maintenance sequence finished.'
-    Write-ModuleLog -Level 'INFO' -Message 'Recommended maintenance sequence finished.'
-}
-
 function Start-Win-Repair {
     $summary = @()
     Write-ModuleLog -Level 'INFO' -Message 'Starting full Windows repair sequence.'
@@ -240,7 +229,7 @@ function Start-Win-Repair {
 
 function Show-WindowsRepairPage {
     $header = New-MenuHeader -Name 'Windows Auto Repair' -Version '1.3' -InfoLines @(
-        'Recommended: [13] full pass, or [1] then [2] manually',
+        'Recommended: [1] Full Pass, then [2]',
         ("Logs       : {0}" -f (Get-TechnificationLogsPath)),
         ("Reports    : {0}" -f (Get-TechnificationReportsPath)),
         ("Transcript : {0}" -f $script:TranscriptLog)
@@ -262,7 +251,6 @@ $script:GetRepairItems = {
         (New-MenuItem -Key '10' -Label 'New System Restore Point' -Action { New-RestorePoint } -PauseAfter $true -Color 'DarkYellow')
         (New-MenuItem -Key '11' -Label 'Start Diagnostics' -Action { Start-Diagnostics } -PauseAfter $true -Color 'Cyan')
         (New-MenuItem -Key '12' -Label 'Start SFC' -Action { Start-SFC } -PauseAfter $true -Color 'DarkGreen')
-        (New-MenuItem -Key '13' -Label 'Recommended Maintenance Sequence' -Action { Start-RecommendedMaintenance } -PauseAfter $true)
         (New-MenuItem -Key '14' -Label 'Flush DNS Cache' -Action { Clear-DNSCache } -PauseAfter $true -Color 'Magenta')
         (New-MenuItem -Key '15' -Label 'Run CHKDSK Online Scan' -Action { Start-DiskCheckScan } -PauseAfter $true -Color 'DarkYellow')
         (New-MenuItem -Key '16' -Label 'Export System Health Report' -Action { Export-SystemHealthReport } -PauseAfter $true -Color 'Cyan')
