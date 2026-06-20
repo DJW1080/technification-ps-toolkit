@@ -172,12 +172,6 @@ function Start-Diagnostics {
     Invoke-WithSpinner -Description 'System Diagnostics' -Command 'systeminfo; Get-Volume; Get-PhysicalDisk -ErrorAction SilentlyContinue; Get-EventLog -LogName System -Newest 20'
 }
 
-function Start-DiskCheckScan {
-    Write-Info 'Running online disk scan on C: ...'
-    Write-ModuleLog -Level 'INFO' -Message 'Launching CHKDSK online scan on C:.'
-    chkdsk C: /scan
-}
-
 function Export-SystemHealthReport {
     $reportPath = New-TechnificationReportFile -ModuleName $script:ModuleName -Prefix 'health-report' -Extension 'txt'
     Write-Info 'Building system health report...'
@@ -252,7 +246,6 @@ $script:GetRepairItems = {
         (New-MenuItem -Key '11' -Label 'Start Diagnostics' -Action { Start-Diagnostics } -PauseAfter $true -Color 'Cyan')
         (New-MenuItem -Key '12' -Label 'Start SFC' -Action { Start-SFC } -PauseAfter $true -Color 'DarkGreen')
         (New-MenuItem -Key '14' -Label 'Flush DNS Cache' -Action { Clear-DNSCache } -PauseAfter $true -Color 'Magenta')
-        (New-MenuItem -Key '15' -Label 'Run CHKDSK Online Scan' -Action { Start-DiskCheckScan } -PauseAfter $true -Color 'DarkYellow')
         (New-MenuItem -Key '16' -Label 'Export System Health Report' -Action { Export-SystemHealthReport } -PauseAfter $true -Color 'Cyan')
         (New-MenuItem -Key '0' -Label 'Return To Toolbox' -Action { Write-Host 'Returning to Technification Toolbox...' -ForegroundColor Blue; return '__EXIT_MENU__' } -Color 'Blue')
     )
