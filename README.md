@@ -14,6 +14,8 @@ Technification PowerShell Toolkit is a collection of PowerShell utilities.
 Designed for **Beginners** and **Professionals** it features a single launcher and module submenus.  
 Automating Windows maintenance and repair tasks using a **Menu-driven Interface**.  
 
+![Technification Powershell Toolkit](/technification-ps-toolkit.png)  
+
 ## 🕹️ Current Modules
 
 - `Windows Auto Repair` (`v1.3`)
@@ -25,27 +27,10 @@ Automating Windows maintenance and repair tasks using a **Menu-driven Interface*
 
 ## 📦 Run Script Directly
 
-Run from the repository root:
-
 ```powershell
 git clone https://github.com/DJW1080/technification-ps-toolkit.git
 cd technification-ps-toolkit
 .\technification-toolbox.ps1
-```
-
-## 📋 Menu Layout
-
-Top-level menu:
-
-```text
-[1] Windows Auto Repair
-[2] User Profile Cleanup
-[3] Event Log Cleaner
-[4] Windows Enhancements
-[5] Network Diagnostics Suite
-[6] Winget Maintenance
-[9] About
-[0] Exit
 ```
 
 ## 📂 Directory Layout
@@ -102,11 +87,14 @@ C:\ProgramData\Technification\
 - Most modules can be launched directly, but the toolbox is the intended entry point.
 - If `ProgramData` is unavailable, the shared logging helper falls back to `%LOCALAPPDATA%\Technification`.
 
+## 📝 Credits
+
+Created by **Dean John Weiniger**.  
+
 ## 📜 Licence
 
+This work is dedicated to the public domain under the **Creative Commons CC0 1.0 Universal License**.  
 [![CC0 1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey?logo=creativecommons&logoColor=white)](https://creativecommons.org/publicdomain/zero/1.0/)  
-This work is dedicated to the public domain under the:  
-**Creative Commons CC0 1.0 Universal License**  
 
 **You are free to:**  
 ✅ **Share** – Copy and redistribute the material in any medium or format.  
@@ -116,14 +104,8 @@ This work is dedicated to the public domain under the:
 **No conditions apply:**  
 🚫 No attribution required.  
 🚫 No restrictions on use.  
-**Full licence text:** [https://creativecommons.org/publicdomain/zero/1.0/](https://creativecommons.org/publicdomain/zero/1.0/)  
-
-## 📝 Credits
-
-Created by **Dean John Weiniger**.  
-With the use of:
-
-- Codex - based on GPT-5.4
-- Copilot
+**Full licence text:** [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)  
 
 ---
+
+### updated: 20-06-2026
