@@ -28,7 +28,9 @@ Automating Windows maintenance and repair tasks using a **Menu-driven Interface*
 Run from the repository root:
 
 ```powershell
-pwsh -File .\technification-toolbox.ps1
+git clone https://github.com/DJW1080/technification-ps-toolkit.git
+cd technification-ps-toolkit
+.\technification-toolbox.ps1
 ```
 
 ## 📋 Menu Layout
